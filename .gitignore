@@ -1,0 +1,9 @@
+# MODULES
+node_modules
+
+#LOCK FILES
+package.json
+pnpm-lock.yaml
+
+#ENV
+.env
