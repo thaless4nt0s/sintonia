@@ -16,9 +16,12 @@ function paginas (app) {
   // CONSTANTS
 
   const ROUTES_ALUNOS = require('../routes/alunos')
+  const ROUTES_REGISTRAR =require('../routes/registrar')
 
   // APP.USE
+
   app.use('/alunos', ROUTES_ALUNOS)
+  app.use('/registrar', ROUTES_REGISTRAR)
 }
 
 
