@@ -17,6 +17,11 @@
 **Response**:
 
 ```
+  {
+    "status": "ok",
+    "statusCode": 200,
+    "body": "Um aluno foi adicionado com sucesso !"
+  }
 
 ```
 
