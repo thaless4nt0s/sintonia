@@ -17,7 +17,7 @@ exports.adicionar = async (req, res, next) => {
   try {
     body.senha = await HELPER_SENHA.criptografarSenha(body.senha)
     const aluno = await REPOSITORY_ALUNOS.adicionar(body)
-    HELPER_RESPONSE.success(res, aluno)
+    HELPER_RESPONSE.success(res, 'Um aluno foi adicionado com sucesso !')
   } catch (error) {
     next(error)
   }
