@@ -26,3 +26,11 @@ cd ./sintonia
 pnpm dev
 ```
 ---
+
+# Documentações
+
+| Rotas                                         |
+| --------------------------------------------- |
+| [Index](endpoints/index.md)                   |
+| [Error](endpoints/error.md)                   |
+| [Registrar](endpoints/registrar.md)           |
