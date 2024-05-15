@@ -3,8 +3,12 @@
 const mongoose = require('mongoose')
 
 /* ---- MODELS ---- */
-const HELPER_DATE = require('../helpers/date')
+
 const MODEL_ALUNOS = mongoose.model('Alunos')
+
+/* --- HELPERS --- */
+
+const HELPER_DATE = require('../helpers/date')
 
 /* ---- METHODS ---- */
 
@@ -19,7 +23,6 @@ exports.adicionar = async (body) => {
 
   const alunoNovo = await MODEL_ALUNOS.create(aluno)
   return alunoNovo
-
 }
 
 /* --- AUX FUNCTIONS --- */
