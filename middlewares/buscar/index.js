@@ -2,6 +2,7 @@
 
 const REPOSITORY_ALUNOS = require('../../repositories/alunos')
 const REPOSITORY_TUTORES = require('../../repositories/tutores')
+const REPOSITORY_ADMINS = require('../../repositories/admins')
 
 /* --- HELPERS --- */
 
@@ -15,7 +16,8 @@ exports.buscarEmailExistente = async (req, res, next) => {
   try {
     const aluno = await REPOSITORY_ALUNOS.buscarUm({email: body.email})
     const tutor = await REPOSITORY_TUTORES.buscarUm({email: body.email})
-    if (aluno || tutor){
+    const admin = await REPOSITORY_ADMINS.buscarUm({email: body.email})
+    if (aluno || tutor || admin){
       return HELPER_RESPONSE.simpleError(res, 406, 'Email digitado existente !')
     }
     next()
