@@ -1,6 +1,7 @@
 /* --- REPOSITORIES --- */
 
 const REPOSITORY_ALUNOS = require('../../repositories/alunos')
+const REPOSITORY_TUTORES = require('../../repositories/tutores')
 
 /* --- HELPERS --- */
 
@@ -13,7 +14,8 @@ exports.buscarEmailExistente = async (req, res, next) => {
 
   try {
     const aluno = await REPOSITORY_ALUNOS.buscarUm({email: body.email})
-    if (aluno){
+    const tutor = await REPOSITORY_TUTORES.buscarUm({email: body.email})
+    if (aluno || tutor){
       return HELPER_RESPONSE.simpleError(res, 406, 'Email digitado existente !')
     }
     next()
@@ -27,7 +29,8 @@ exports.buscarMatriculaExistente = async (req, res, next) => {
 
   try {
     const aluno = await REPOSITORY_ALUNOS.buscarUm({matricula: body.matricula})
-    if (aluno){
+    const tutor = await REPOSITORY_TUTORES.buscarUm({matricula: body.matricula})
+    if (aluno || tutor){
       return HELPER_RESPONSE.simpleError(res, 406, 'Matricula digitada existente !')
     }
     next()
