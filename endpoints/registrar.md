@@ -56,3 +56,31 @@
 ```
 
 ---
+
+#### Registrar Administrador
+
+**POST** `/registrar/administrador`
+
+- **Descrição**: Endpoint responsável por registrar um aluno.
+- **Autenticação**: Necessário.
+
+**Query**:
+
+| CAMPO        | TIPO   | OBRIGATÓRIO   | EXEMPLO                        | VALORES ACEITOS                |
+| ------------ | ------ | ------------- | ------------------------------ | ------------------------------ |
+| nome         | string | Sim           | Neymar jr                      |                                |
+| email        | string | Sim           | neymar.jr.00@aluno.ifce.edu.br | somente @ifce.edu.br           |
+| senha        | string | Sim           | 12345678                       | De 8 até - caracteres          |
+
+**Response**:
+
+```
+  {
+    "status": "ok",
+    "statusCode": 200,
+    "body": "Um tutor foi adicionado com sucesso !"
+  }
+
+```
+
+---
