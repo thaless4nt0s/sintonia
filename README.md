@@ -34,3 +34,27 @@ pnpm dev
 | [Index](endpoints/index.md)                   |
 | [Error](endpoints/error.md)                   |
 | [Registrar](endpoints/registrar.md)           |
+| [Autenticar](endpoints/autenticacao.md)       |
+
+---
+
+# ENDPOINTS
+
+<li>O header da requisição deve seguir o seguinte formato:</li>
+
+```
+{
+  "Accept": "application/json",
+  "Content-Type": "application/json"
+}
+```
+
+<li>As requisições que exigem autenticação devem seguir o seguinte formato:</li>
+
+```
+{
+  "x-access-token": "{token}"
+}
+```
+
+---
