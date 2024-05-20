@@ -56,3 +56,14 @@ exports.mostrarTodos = async (req, res, next) => {
     next(error)
   }
 }
+
+// Mostrar uma disciplina
+exports.mostrarUm = async (req, res, next) => {
+  const { idDisciplina } = req.params
+  try {
+    const disciplina = await REPOSITORY_DISCIPLINAS.buscarUm({_id: idDisciplina}, {__v: 0, dataRegistro: 0})
+    HELPER_RESPONSE.success(res, disciplina)
+  } catch (error) {
+    next(error)
+  }
+}

@@ -13,8 +13,8 @@ const HELPER_DATE = require('../helpers/date')
 /* ---- METHODS ---- */
 
 //Buscar um
-exports.buscarUm = async (filtros) => {
-  return MODEL_DISCIPLINAS.findOne(filtros)
+exports.buscarUm = async (filtros, select = {}) => {
+  return MODEL_DISCIPLINAS.findOne(filtros).select(select)
 }
 
 // Adiciona uma disciplina

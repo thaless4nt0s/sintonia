@@ -47,4 +47,11 @@ router.get(
   CONTROLLER_DISCIPLINAS.mostrarTodos
 )
 
+router.get(
+  '/:idDisciplina',
+  MIDDLEWARE_DISCIPLINAS.verificarExistenciaPorId,
+  MIDDLEWARE_TOKEN.acessoPorTodosOsUsuarios,
+  CONTROLLER_DISCIPLINAS.mostrarUm
+)
+
 module.exports = router
