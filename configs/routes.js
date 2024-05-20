@@ -16,12 +16,14 @@ function paginas (app) {
   // CONSTANTS
 
   const ROUTES_ALUNOS = require('../routes/alunos')
-  const ROUTES_REGISTRAR =require('../routes/registrar')
+  const ROUTES_REGISTRAR = require('../routes/registrar')
+  const ROUTES_AUTENTICAR = require('../routes/autenticacao')
 
   // APP.USE
 
   app.use('/alunos', ROUTES_ALUNOS)
   app.use('/registrar', ROUTES_REGISTRAR)
+  app.use('/autenticacao', ROUTES_AUTENTICAR)
 }
 
 
