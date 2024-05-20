@@ -34,6 +34,15 @@ exports.remover = async (idDisciplina) => {
   return MODEL_DISCIPLINAS.findByIdAndDelete(idDisciplina).catch(error => { throw error })
 }
 
+// mostrar todas as discplinas
+exports.mostrarTodos = async (alfabetoCrescente) => {
+  let sort = { nome: 1 }
+  if (alfabetoCrescente === 'false') {
+    sort = { nome: -1 }
+  }
+  return MODEL_DISCIPLINAS.find().select({ __v: 0, dataRegistro: 0 }).sort(sort)
+}
+
 /* --- AUXILIARY FUNCTIONS --- */
 
 function gerarDisciplina (dados) {

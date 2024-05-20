@@ -44,3 +44,15 @@ exports.remover = async (req, res, next) => {
     next(error)
   }
 }
+
+// Mostrar todas as disciplinas
+exports.mostrarTodos = async (req, res, next) => {
+  const { alfabetoCrescente } = req.query
+
+  try {
+    const disciplinas = await REPOSITORY_DISCIPLINAS.mostrarTodos(alfabetoCrescente)
+    HELPER_RESPONSE.success(res, disciplinas)
+  } catch (error) {
+    next(error)
+  }
+}

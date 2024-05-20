@@ -35,3 +35,23 @@ exports.adicionar = async (req, res, next) => {
   const erro = VALIDATOR_ERROR.first(validacao)
   HELPER_RESPONSE.simpleError(res, 406, erro)
 }
+
+exports.buscarDisciplinas = async (req, res, next) => {
+  const { body } = req
+
+  const regras = {
+    alfabetoCrescente: 'boolean',
+  }
+
+  // Validações
+  const validacao = new Validator(body, regras, VALIDATION_LANGUAGE)
+
+  if (!validacao.fails()) {
+      next()
+      return
+  }
+
+  // Lidar com erro
+  const erro = VALIDATOR_ERROR.first(validacao)
+  HELPER_RESPONSE.simpleError(res, 406, erro)
+}

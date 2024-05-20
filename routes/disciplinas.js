@@ -5,7 +5,7 @@ const router = express.Router()
 
 /* --- MIDDLEWARES --- */
 
-const MIDDLEWARE_ADMIN = require('../middlewares/token')
+const MIDDLEWARE_TOKEN = require('../middlewares/token')
 const MIDDLEWARE_IDS = require('../middlewares/ids')
 const MIDDLEWARE_DISCIPLINAS = require('../middlewares/disciplinas')
 
@@ -18,7 +18,7 @@ const VALIDATION_DISCIPLINAS = require('../validations/disciplinas')
 
 router.post(
   '/',
-  MIDDLEWARE_ADMIN.acessoSomenteAdministrador,
+  MIDDLEWARE_TOKEN.acessoSomenteAdministrador,
   VALIDATION_DISCIPLINAS.adicionar,
   CONTROLLER_DISCIPLINAS.adicionar
 )
@@ -26,7 +26,7 @@ router.post(
 router.put(
   '/:idDisciplina',
   MIDDLEWARE_IDS.validarIds,
-  MIDDLEWARE_ADMIN.acessoSomenteAdministrador,
+  MIDDLEWARE_TOKEN.acessoSomenteAdministrador,
   MIDDLEWARE_DISCIPLINAS.verificarExistenciaPorId,
   VALIDATION_DISCIPLINAS.adicionar,
   CONTROLLER_DISCIPLINAS.alterarDados
@@ -36,8 +36,15 @@ router.delete(
   '/:idDisciplina',
   MIDDLEWARE_IDS.validarIds,
   MIDDLEWARE_DISCIPLINAS.verificarExistenciaPorId,
-  MIDDLEWARE_ADMIN.acessoSomenteAdministrador,
+  MIDDLEWARE_TOKEN.acessoSomenteAdministrador,
   CONTROLLER_DISCIPLINAS.remover
+)
+
+router.get(
+  '/',
+  MIDDLEWARE_TOKEN.acessoPorTodosOsUsuarios,
+  VALIDATION_DISCIPLINAS.buscarDisciplinas,
+  CONTROLLER_DISCIPLINAS.mostrarTodos
 )
 
 module.exports = router
