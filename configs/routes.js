@@ -18,12 +18,14 @@ function paginas (app) {
   const ROUTES_ALUNOS = require('../routes/alunos')
   const ROUTES_REGISTRAR = require('../routes/registrar')
   const ROUTES_AUTENTICAR = require('../routes/autenticacao')
+  const ROUTES_DISCIPLINAS = require('../routes/disciplinas')
 
   // APP.USE
 
   app.use('/alunos', ROUTES_ALUNOS)
   app.use('/registrar', ROUTES_REGISTRAR)
   app.use('/autenticacao', ROUTES_AUTENTICAR)
+  app.use('/disciplinas', ROUTES_DISCIPLINAS)
 }
 
 
