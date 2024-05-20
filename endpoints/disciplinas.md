@@ -98,3 +98,24 @@
 ```
 
 ---
+
+**GET** `/disciplinas/:idDisciplina`
+
+- **Descrição**: Endpoint responsável por mostrar uma disciplina.
+- **Autenticação**: Necessário.
+
+**Response**:
+
+```
+{
+  "status": "ok",
+  "statusCode": 200,
+  "body": {
+    "_id": "664b510c553bc83206f93345",
+    "nome": "LIBRAS"
+  }
+}
+
+```
+
+---
