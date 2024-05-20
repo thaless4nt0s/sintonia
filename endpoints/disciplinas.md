@@ -62,3 +62,39 @@
 ```
 
 ---
+
+**GET** `/disciplinas?alfabetoCrescente={}`
+
+- **Descrição**: Endpoint responsável por mostrar todas as disciplinas.
+- **Autenticação**: Necessário.
+
+**Query**:
+
+| CAMPO             | TIPO    | OBRIGATÓRIO   | EXEMPLO                        |
+| ----------------- | ------- | ------------- | ------------------------------ |
+| alfateboCrescente | boolean | Não           | true                           |
+
+**Response**:
+
+```
+{
+  "status": "ok",
+  "statusCode": 200,
+  "body": [
+    {
+      "_id": "664b9a18ff5d958dbc432397",
+      "nome": "Cálculo 1"
+    },
+    {
+      "_id": "664b9a21ff5d958dbc432399",
+      "nome": "Física 2"
+    },
+    {
+      "_id": "664b510c553bc83206f93345",
+      "nome": "LIBRAS"
+    }
+  ]
+}
+```
+
+---
