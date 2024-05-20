@@ -45,3 +45,20 @@
 ```
 
 ---
+
+**DELETE** `/disciplinas/:idDisciplina`
+
+- **Descrição**: Endpoint responsável por remover uma disciplina.
+- **Autenticação**: Necessário.
+
+**Response**:
+
+```
+{
+  "status": "ok",
+  "statusCode": 200,
+  "body": "Uma disciplina foi excluida com sucesso !"
+}
+```
+
+---
