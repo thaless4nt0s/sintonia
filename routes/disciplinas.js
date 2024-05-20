@@ -6,6 +6,7 @@ const router = express.Router()
 /* --- MIDDLEWARES --- */
 
 const MIDDLEWARE_ADMIN = require('../middlewares/token')
+const MIDDLEWARE_IDS = require('../middlewares/ids')
 
 /* --- CONSTANTS --- */
 
@@ -19,6 +20,14 @@ router.post(
   MIDDLEWARE_ADMIN.acessoSomenteAdministrador,
   VALIDATION_DISCIPLINAS.adicionar,
   CONTROLLER_DISCIPLINAS.adicionar
+)
+
+router.put(
+  '/:idDisciplina',
+  MIDDLEWARE_IDS.validarIds,
+  MIDDLEWARE_ADMIN.acessoSomenteAdministrador,
+  VALIDATION_DISCIPLINAS.adicionar,
+  CONTROLLER_DISCIPLINAS.alterarDados
 )
 
 module.exports = router

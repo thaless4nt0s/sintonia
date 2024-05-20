@@ -19,3 +19,16 @@ exports.adicionar = async (req, res, next) => {
     next(error)
   }
 }
+
+// Alterar dados de uma disciplina
+exports.alterarDados = async (req, res, next) => {
+  const { idDisciplina } = req.params
+  const { body } = req
+
+  try {
+    await REPOSITORY_DISCIPLINAS.alterarDados(idDisciplina, body)
+    HELPER_RESPONSE.success(res, 'Uma disciplina foi alterada com sucesso !')
+  } catch (error) {
+    next(error)
+  }
+}
