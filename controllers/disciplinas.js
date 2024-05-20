@@ -32,3 +32,15 @@ exports.alterarDados = async (req, res, next) => {
     next(error)
   }
 }
+
+// remover uma disciplina
+exports.remover = async (req, res, next) => {
+  const { idDisciplina } = req.params
+
+  try {
+    await REPOSITORY_DISCIPLINAS.remover(idDisciplina)
+    HELPER_RESPONSE.success(res, 'Uma disciplina foi excluida com sucesso !')
+  } catch (error) {
+    next(error)
+  }
+}

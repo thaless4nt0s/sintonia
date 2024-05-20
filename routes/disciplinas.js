@@ -7,6 +7,7 @@ const router = express.Router()
 
 const MIDDLEWARE_ADMIN = require('../middlewares/token')
 const MIDDLEWARE_IDS = require('../middlewares/ids')
+const MIDDLEWARE_DISCIPLINAS = require('../middlewares/disciplinas')
 
 /* --- CONSTANTS --- */
 
@@ -26,8 +27,17 @@ router.put(
   '/:idDisciplina',
   MIDDLEWARE_IDS.validarIds,
   MIDDLEWARE_ADMIN.acessoSomenteAdministrador,
+  MIDDLEWARE_DISCIPLINAS.verificarExistenciaPorId,
   VALIDATION_DISCIPLINAS.adicionar,
   CONTROLLER_DISCIPLINAS.alterarDados
+)
+
+router.delete(
+  '/:idDisciplina',
+  MIDDLEWARE_IDS.validarIds,
+  MIDDLEWARE_DISCIPLINAS.verificarExistenciaPorId,
+  MIDDLEWARE_ADMIN.acessoSomenteAdministrador,
+  CONTROLLER_DISCIPLINAS.remover
 )
 
 module.exports = router
