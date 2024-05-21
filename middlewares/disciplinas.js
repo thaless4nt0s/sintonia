@@ -27,3 +27,19 @@ exports.verificarExistenciaPorId = async (req, res, next) => {
     next(error)
   }
 }
+
+exports.verificarExistenciaPorParametro = async (req, res, next) => {
+  const { idDisciplina } = req.body
+
+  try {
+    const disciplina = await REPOSITORY_DISCIPLINAS.buscarUm({ _id: idDisciplina })
+
+    if (!disciplina) {
+      HELPER_RESPONSE.simpleError(res, 406, 'Disciplina inexistente !')
+      return
+    }
+    next()
+  } catch (error) {
+    next(error)
+  }
+}
