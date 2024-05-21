@@ -13,14 +13,19 @@ const HELPER_DATE = require('../helpers/date')
 /* ---- METHODS ---- */
 
 // Busca de maneira especifica
-exports.buscarUm = async (filtro) => {
-  return MODEL_TUTORES.findOne(filtro)
+exports.buscarUm = async (filtro, select={}) => {
+  return MODEL_TUTORES.findOne(filtro).select(select)
 }
 
 // Adicionar tutor
 exports.adicionar = async (body) => {
   const tutor = gerarTutor(body)
   return MODEL_TUTORES.create(tutor)
+}
+
+exports.alterarDados = async (idTutor, body) => {
+  const tutorAlterado = gerarTutorAlterado(body)
+  return MODEL_TUTORES.findByIdAndUpdate(idTutor, tutorAlterado)
 }
 
 /* --- AUX FUNCTIONS --- */
@@ -35,5 +40,11 @@ function gerarTutor(dados) {
   if (senha) tutor.senha = senha
   if (semestre) tutor.semestre = semestre
 
+  return tutor
+}
+
+function gerarTutorAlterado(dados) {
+  const tutor = gerarTutor(dados)
+  if (dados.idDisciplina) tutor.idDisciplina = dados.idDisciplina
   return tutor
 }

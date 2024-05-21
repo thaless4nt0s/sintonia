@@ -21,3 +21,17 @@ exports.adicionar = async (req, res, next) => {
     next(error)
   }
 }
+
+// alterar dados de um tutor
+exports.alterarDados = async (req, res, next) => {
+  const { idTutor } = req.params
+  const { body } = req
+
+  try {
+    if (body.senha) body.senha = await HELPER_SENHA.criptografarSenha(body.senha)
+    await REPOSITORY_TUTORES.alterarDados(idTutor, body)
+    HELPER_RESPONSE.success(res, 'Tutor alterado com sucesso !')
+  } catch (error) {
+    next(error)
+  }
+}
