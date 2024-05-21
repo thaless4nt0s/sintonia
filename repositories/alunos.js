@@ -13,8 +13,8 @@ const HELPER_DATE = require('../helpers/date')
 /* ---- METHODS ---- */
 
 // Busca de maneira especifica
-exports.buscarUm = async (filtro) => {
-  return MODEL_ALUNOS.findOne(filtro)
+exports.buscarUm = async (filtro, select = {}) => {
+  return MODEL_ALUNOS.findOne(filtro).select(select)
 }
 
 // Adicionar aluno
@@ -23,6 +23,11 @@ exports.adicionar = async (body) => {
 
   const alunoNovo = await MODEL_ALUNOS.create(aluno)
   return alunoNovo
+}
+
+exports.alterarDados = async (idAluno, body) => {
+  const alunoEditado = gerarAlunoEditado(body)
+  return MODEL_ALUNOS.findOneAndUpdate({_id: idAluno}, alunoEditado).catch(error => { throw error })
 }
 
 /* --- AUX FUNCTIONS --- */
@@ -35,6 +40,13 @@ function gerarAluno(dados) {
   if (email) aluno.email = email
   if (matricula) aluno.matricula = matricula
   if (senha) aluno.senha = senha
+
+  return aluno
+}
+
+function gerarAlunoEditado(dados) {
+  const aluno = gerarAluno(dados)
+  if (dados.idDisciplina) aluno.idDisciplina = dados.idDisciplina
 
   return aluno
 }
