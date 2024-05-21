@@ -59,7 +59,21 @@ module.exports = (mongoose) => {
       type: Date,
       immutable: true,
       default: function () { return HELPER_DATE.now() }
+    },
+
+    idDisciplina: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Disciplinas',
+      index: true
+    }]
+  })
+
+  // Middleware de pré-validação para limitar o número de disciplinas
+  schema.pre('validate', function (next) {
+    if (this.idDisciplina.length > 3) {
+      return next(new Error('Um tutor pode ter no máximo 3 disciplinas.'))
     }
+    next()
   })
 
   return mongoose.model('Tutores', schema)
