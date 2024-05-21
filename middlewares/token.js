@@ -30,7 +30,6 @@ exports.acessoSomenteAdministrador = async (req, res, next) => {
     if (!acessoValido) return  // Se a validação falhar, retorne imediatamente para evitar chamar next()
     next()
   } catch (error) {
-    console.error(error)
     next(error)
   }
 }
