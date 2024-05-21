@@ -36,6 +36,7 @@ pnpm dev
 | [Registrar](endpoints/registrar.md)           |
 | [Autenticar](endpoints/autenticacao.md)       |
 | [Disciplinas](endpoints/disciplinas.md)       |
+| [Alunos](endpoints/alunos.md)                 |
 
 ---
 
