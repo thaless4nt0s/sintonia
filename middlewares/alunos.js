@@ -67,7 +67,7 @@ exports.verificarMatriculaEditada = async (req, res, next) => {
     }
 
     // Verifica se a nova matrícula já está sendo utilizada por outro usuário
-    const matriculaExistente = await REPOSITORY_ALUNOS.buscarUm({ matricula: body.matricula }, { matricula: 1, _id: 1 })
+    const matriculaExistente = await REPOSITORY_ALUNOS.buscarUm({ matricula: body.matricula }, { matricula: 1, _id: 1 }) || await REPOSITORY_TUTORES.buscarUm({ matricula: body.matricula }, { matricula: 1, _id: 1 })
     if (matriculaExistente && matriculaExistente._id.toString() !== idAluno) {
       return HELPER_RESPONSE.simpleError(res, 406, 'Matrícula digitada já existente!')
     }
@@ -95,7 +95,7 @@ exports.verificarEmailEditado = async (req, res, next) => {
     }
 
     // Verifica se a nova email já está sendo utilizada por outro usuário
-    const emailExistente = await REPOSITORY_ALUNOS.buscarUm({ email: body.email }, { email: 1, _id: 1 })
+    const emailExistente = await REPOSITORY_ALUNOS.buscarUm({ email: body.email }, { email: 1, _id: 1 }) || await REPOSITORY_TUTORES.buscarUm({ email: body.email }, { email: 1, _id: 1 })
     if (emailExistente && emailExistente._id.toString() !== idAluno) {
       return HELPER_RESPONSE.simpleError(res, 406, 'Email digitado já existente!')
     }
