@@ -43,3 +43,22 @@ exports.verificarExistenciaPorParametro = async (req, res, next) => {
     next(error)
   }
 }
+
+exports.verificarExistenciaEmArrayPorParametro = async (req, res, next) => {
+  const { idDisciplina } = req.body
+
+  try {
+      if (idDisciplina){
+      const promises = idDisciplina.map(async (element) => {
+        const disciplina = await REPOSITORY_DISCIPLINAS.buscarUm({ _id: element })
+        if (!disciplina) {
+          throw new Error('Há pelo menos uma disciplina inválida, selecione-a(s) novamente!')
+        }
+      })
+      await Promise.all(promises)
+    }
+    next()
+  } catch (error) {
+    HELPER_RESPONSE.simpleError(res, 406, error.message)
+  }
+}
