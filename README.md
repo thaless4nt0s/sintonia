@@ -37,6 +37,7 @@ pnpm dev
 | [Autenticar](endpoints/autenticacao.md)       |
 | [Disciplinas](endpoints/disciplinas.md)       |
 | [Alunos](endpoints/alunos.md)                 |
+| [Tutores](endpoints/tutores.md)               |
 
 ---
 
