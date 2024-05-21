@@ -52,6 +52,12 @@ module.exports = (mongoose) => {
       default: function () { return HELPER_DATE.now() }
     },
 
+    idDisciplina: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Disciplinas',
+      index: true
+    },
+
   })
 
   return mongoose.model('Alunos', schema)
