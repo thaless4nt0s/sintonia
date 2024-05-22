@@ -72,7 +72,7 @@
 
 | CAMPO             | TIPO    | OBRIGATÓRIO   | EXEMPLO                        |
 | ----------------- | ------- | ------------- | ------------------------------ |
-| alfateboCrescente | boolean | Não           | true                           |
+| alfabetoCrescente | boolean | Não           | true                           |
 
 **Response**:
 
