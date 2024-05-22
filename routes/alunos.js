@@ -23,12 +23,20 @@ router.patch(
   '/:idAluno',
   MIDDLEWARE_TOKEN.acessoSomenteAluno,
   MIDDLEWARE_ALUNOS.verificarExistenciaPorId,
-  MIDDLEWARE_ALUNOS.verificarAlunoAutenticadoParaAlterarDados,
+  MIDDLEWARE_ALUNOS.verificarAlunoAutenticado,
   MIDDLEWARE_DISCIPLINAS.verificarExistenciaPorParametro,
   MIDDLEWARE_ALUNOS.verificarMatriculaEditada,
   MIDDLEWARE_ALUNOS.verificarEmailEditado,
   VALIDATION_ALUNOS.alterarDados,
   CONTROLLER_ALUNOS.alterarDados
+)
+
+router.delete(
+  '/:idAluno',
+  MIDDLEWARE_TOKEN.acessoSomenteAluno,
+  MIDDLEWARE_ALUNOS.verificarExistenciaPorId,
+  MIDDLEWARE_ALUNOS.verificarAlunoAutenticado,
+  CONTROLLER_ALUNOS.remover
 )
 
 module.exports = router

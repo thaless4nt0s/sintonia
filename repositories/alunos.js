@@ -25,9 +25,15 @@ exports.adicionar = async (body) => {
   return alunoNovo
 }
 
+// alterar dados de um aluno
 exports.alterarDados = async (idAluno, body) => {
   const alunoEditado = gerarAlunoEditado(body)
   return MODEL_ALUNOS.findOneAndUpdate({_id: idAluno}, alunoEditado).catch(error => { throw error })
+}
+
+// remover um aluno
+exports.remover = async (idAluno) => {
+  return MODEL_ALUNOS.findByIdAndDelete(idAluno)
 }
 
 /* --- AUX FUNCTIONS --- */
