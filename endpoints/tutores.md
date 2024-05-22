@@ -44,3 +44,56 @@
 ```
 
 ---
+
+**GET** `/tutores?alfabetoCrescente={}`
+
+- **Descrição**: Endpoint responsável por mostrar todos os tutores.
+- **Autenticação**: Necessário
+
+**QUERY**:
+
+| CAMPO             | TIPO    | OBRIGATÓRIO   | EXEMPLO                        |
+| ----------------- | ------- | ------------- | ------------------------------ |
+| alfabetoCrescente | boolean | Não           | true                           |
+
+**Response**:
+
+```
+{
+  "status": "ok",
+  "statusCode": 200,
+  "body": [
+    {
+      "_id": "664e2e9b005e042583f69f49",
+      "nome": "Mario Sérgio",
+      "semestre": 3,
+      "disciplinas": [
+        {
+            "nome": "Lógica para computação"
+        },
+        {
+            "nome": "Cálculo 1"
+        },
+        {
+            "nome": "LIBRAS"
+        }
+      ]
+    },
+    {
+      "_id": "664de15776e2a0d4310f31e9",
+      "nome": "Henrique Leitão",
+      "semestre": 1,
+      "disciplinas": [
+        {
+            "nome": "Cálculo 1"
+        },
+        {
+            "nome": "LIBRAS"
+        }
+      ]
+    }
+  ]
+}
+```
+
+---
