@@ -29,7 +29,7 @@ exports.verificarExistenciaPorId = async (req, res, next) => {
   }
 }
 
-exports.verificarTutorAutenticadoParaAlterarDados = async (req, res, next) => {
+exports.verificarTutorAutenticado = async (req, res, next) => {
   const { idTutor } = req.params
   const token = req.headers['x-access-token']
 

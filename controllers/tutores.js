@@ -35,3 +35,15 @@ exports.alterarDados = async (req, res, next) => {
     next(error)
   }
 }
+
+// remove um tutor
+exports.remover = async (req, res, next) => {
+  const { idTutor } = req.params
+
+  try {
+    await REPOSITORY_TUTORES.remover(idTutor)
+    HELPER_RESPONSE.success(res, 'Tutor removido com sucesso !')
+  } catch (error) {
+    next(error)
+  }
+}

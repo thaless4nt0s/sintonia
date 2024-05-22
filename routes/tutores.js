@@ -23,12 +23,20 @@ router.patch(
   '/:idTutor',
   MIDDLEWARE_TOKEN.acessoSomenteTutor,
   MIDDLEWARE_TUTORES.verificarExistenciaPorId,
-  MIDDLEWARE_TUTORES.verificarTutorAutenticadoParaAlterarDados,
+  MIDDLEWARE_TUTORES.verificarTutorAutenticado,
   VALIDATION_TUTORES.alterarDados,
   MIDDLEWARE_DISCIPLINAS.verificarExistenciaEmArrayPorParametro,
   MIDDLEWARE_TUTORES.verificarEmailEditado,
   MIDDLEWARE_TUTORES.verificarMatriculaEditada,
   CONTROLLER_TUTORES.alterarDados
+)
+
+router.delete(
+  '/:idTutor',
+  MIDDLEWARE_TOKEN.acessoSomenteTutor,
+  MIDDLEWARE_TUTORES.verificarExistenciaPorId,
+  MIDDLEWARE_TUTORES.verificarTutorAutenticado,
+  CONTROLLER_TUTORES.remover
 )
 
 module.exports = router

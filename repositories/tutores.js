@@ -23,9 +23,15 @@ exports.adicionar = async (body) => {
   return MODEL_TUTORES.create(tutor)
 }
 
+// alterar dados
 exports.alterarDados = async (idTutor, body) => {
   const tutorAlterado = gerarTutorAlterado(body)
   return MODEL_TUTORES.findByIdAndUpdate(idTutor, tutorAlterado)
+}
+
+// remover tutor
+exports.remover = async (idTutor) => {
+  return MODEL_TUTORES.findByIdAndDelete(idTutor)
 }
 
 /* --- AUX FUNCTIONS --- */
