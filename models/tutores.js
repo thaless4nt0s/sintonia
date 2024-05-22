@@ -61,6 +61,11 @@ module.exports = (mongoose) => {
       default: function () { return HELPER_DATE.now() }
     },
 
+    emTutoria: {
+      type: Boolean,
+      default: false
+    },
+
     idDisciplina: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Disciplinas',
