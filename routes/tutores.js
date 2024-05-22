@@ -19,6 +19,13 @@ const VALIDATION_TUTORES = require('../validations/tutores')
 
 /* --- METHODS --- */
 
+router.get(
+  '/',
+  MIDDLEWARE_TOKEN.acessoPorTodosOsUsuarios,
+  VALIDATION_TUTORES.mostrarTodos,
+  CONTROLLER_TUTORES.mostrarTodos
+)
+
 router.patch(
   '/:idTutor',
   MIDDLEWARE_TOKEN.acessoSomenteTutor,

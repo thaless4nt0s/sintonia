@@ -9,6 +9,7 @@ const MODEL_TUTORES = mongoose.model('Tutores')
 /* --- HELPERS --- */
 
 const HELPER_DATE = require('../helpers/date')
+const disciplinas = require('../models/disciplinas')
 
 /* ---- METHODS ---- */
 
@@ -32,6 +33,41 @@ exports.alterarDados = async (idTutor, body) => {
 // remover tutor
 exports.remover = async (idTutor) => {
   return MODEL_TUTORES.findByIdAndDelete(idTutor)
+}
+
+// mostrar todos os tutores
+exports.mostrarTodos = async (query) => {
+  const { alfabetoCrescente } = query
+  let sort = { nome: 1 }
+
+  if (alfabetoCrescente === 'false') {
+    sort = { nome: -1 }
+  }
+
+  const select = {
+    nome: 1,
+    semestre: 1,
+    'disciplinas.nome': 1
+  }
+
+  const tutores = await MODEL_TUTORES.aggregate([
+    {
+      $lookup:{
+        from: 'disciplinas',
+        localField: 'idDisciplina',
+        foreignField: '_id',
+        as: 'disciplinas'
+      }
+    },
+    {
+      $sort: sort
+    },
+    {
+      $project: select
+    }
+  ])
+
+  return tutores
 }
 
 /* --- AUX FUNCTIONS --- */

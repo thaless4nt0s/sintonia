@@ -47,3 +47,14 @@ exports.remover = async (req, res, next) => {
     next(error)
   }
 }
+
+// mostrar todos os tutores
+exports.mostrarTodos = async (req, res, next) => {
+  const { query } = req
+  try {
+    const tutores = await REPOSITORY_TUTORES.mostrarTodos(query)
+    HELPER_RESPONSE.success(res, tutores)
+  } catch (error) {
+    next(error)
+  }
+}
