@@ -27,3 +27,20 @@
 ```
 
 ---
+
+**DELETE** `/tutores/:idTutor`
+
+- **Descrição**: Endpoint responsável por remover um tutor.
+- **Autenticação**: Necessário
+
+**Response**:
+
+```
+{
+  "status": "ok",
+  "statusCode": 200,
+  "body": "Tutor removido com sucesso !"
+}
+```
+
+---
