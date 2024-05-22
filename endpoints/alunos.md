@@ -26,3 +26,20 @@
 ```
 
 ---
+
+**DELETE** `/alunos/:idAluno`
+
+- **Descrição**: Endpoint responsável por remover um aluno.
+- **Autenticação**: Necessário
+
+**Response**:
+
+```
+{
+  "status": "ok",
+  "statusCode": 200,
+  "body": "Aluno removido com sucesso !"
+}
+```
+
+---
