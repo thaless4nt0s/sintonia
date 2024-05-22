@@ -31,7 +31,7 @@ exports.verificarExistenciaPorId = async (req, res, next) => {
   }
 }
 
-exports.verificarAlunoAutenticadoParaAlterarDados = async (req, res, next) => {
+exports.verificarAlunoAutenticado = async (req, res, next) => {
   const { idAluno } = req.params
   const token = req.headers['x-access-token']
 
