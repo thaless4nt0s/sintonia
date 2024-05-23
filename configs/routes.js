@@ -21,6 +21,7 @@ function paginas (app) {
   const ROUTES_DISCIPLINAS = require('../routes/disciplinas')
   const ROUTES_TUTORES = require('../routes/tutores')
   const ROUTES_ADMINS = require('../routes/admins')
+  const ROUTES_TUTORIAS = require('../routes/tutorias')
 
   // APP.USE
 
@@ -30,6 +31,7 @@ function paginas (app) {
   app.use('/disciplinas', ROUTES_DISCIPLINAS)
   app.use('/tutores', ROUTES_TUTORES)
   app.use('/administradores', ROUTES_ADMINS)
+  app.use('/tutorias', ROUTES_TUTORIAS)
 }
 
 
