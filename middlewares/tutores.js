@@ -104,3 +104,19 @@ exports.verificarEmailEditado = async (req, res, next) => {
     next(error)
   }
 }
+
+exports.verificarSeTutorEstaEmTutoria = async (req, res, next) => {
+  const { idTutor } = req.params
+  try {
+    const tutor = await REPOSITORY_TUTORES.buscarUm({ _id: idTutor, emTutoria: true }, { email: 1 })
+    // se o tutor estiver em tutoria cai no if abaixo
+    if (tutor) {
+      HELPER_RESPONSE.simpleError(res, 406, 'O tutor em questão já está em tutoria no momento !')
+      return
+    }
+
+    next()
+  } catch (error) {
+    next(error)
+  }
+}
