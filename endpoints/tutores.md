@@ -67,6 +67,7 @@
       "_id": "664e2e9b005e042583f69f49",
       "nome": "Mario Sérgio",
       "semestre": 3,
+      "emTutoria": "não",
       "disciplinas": [
         {
             "nome": "Lógica para computação"
@@ -83,6 +84,7 @@
       "_id": "664de15776e2a0d4310f31e9",
       "nome": "Henrique Leitão",
       "semestre": 1,
+      "emTutoria": "sim",
       "disciplinas": [
         {
             "nome": "Cálculo 1"
