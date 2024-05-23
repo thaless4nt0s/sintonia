@@ -39,6 +39,11 @@ module.exports = (mongoose) => {
       unique: true,
     },
 
+    emTutoria: {
+      type: Boolean,
+      default: false
+    },
+
     senha: {
       type: String,
       required: [true, 'O campo Senha é obrigatório'],
