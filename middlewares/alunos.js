@@ -10,8 +10,7 @@ const HELPER_TOKEN = require('../helpers/tokens')
 /* --- REPOSITORIES --- */
 
 const REPOSITORY_ALUNOS = require('../repositories/alunos')
-
-
+const REPOSITORY_TUTORES = require('../repositories/tutores')
 
 /* --- METHODS --- */
 
@@ -98,6 +97,23 @@ exports.verificarEmailEditado = async (req, res, next) => {
     const emailExistente = await REPOSITORY_ALUNOS.buscarUm({ email: body.email }, { email: 1, _id: 1 }) || await REPOSITORY_TUTORES.buscarUm({ email: body.email }, { email: 1, _id: 1 })
     if (emailExistente && emailExistente._id.toString() !== idAluno) {
       return HELPER_RESPONSE.simpleError(res, 406, 'Email digitado já existente!')
+    }
+
+    next()
+  } catch (error) {
+    next(error)
+  }
+}
+
+exports.verificarSeAlunoEstaEmTutoria = async (req, res, next) => {
+  const { idAluno } = req.params
+
+  try {
+    const aluno = await REPOSITORY_ALUNOS.buscarUm({ _id: idAluno, emTutoria: true }, { email: 1 })
+    // se o tutor estiver em tutoria cai no if abaixo
+    if (aluno) {
+      HELPER_RESPONSE.simpleError(res, 406, 'Você está em uma tutoria no momento !')
+      return
     }
 
     next()
