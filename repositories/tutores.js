@@ -47,7 +47,8 @@ exports.mostrarTodos = async (query) => {
   const select = {
     nome: 1,
     semestre: 1,
-    'disciplinas.nome': 1
+    'disciplinas.nome': 1,
+    emTutoria: 1
   }
 
   const tutores = await MODEL_TUTORES.aggregate([
@@ -57,6 +58,13 @@ exports.mostrarTodos = async (query) => {
         localField: 'idDisciplina',
         foreignField: '_id',
         as: 'disciplinas'
+      }
+    },
+    {
+      $addFields: {
+        emTutoria: {
+          $cond: { if: "$emTutoria", then: "sim", else: "não" }
+        }
       }
     },
     {
