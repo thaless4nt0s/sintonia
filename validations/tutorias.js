@@ -18,8 +18,27 @@ exports.validarTutoriaIniciada = async (req, res, next) => {
   const { body } = req
 
   const regras = {
-    // idDisciplina: 'required|string',
     titulo: 'required|string|max:100'
+  }
+
+  // Validações
+  const validacao = new Validator(body, regras, VALIDATION_LANGUAGE)
+
+  if (!validacao.fails()) {
+      next()
+      return
+  }
+
+  // Lidar com erro
+  const erro = VALIDATOR_ERROR.first(validacao)
+  HELPER_RESPONSE.simpleError(res, 406, erro)
+}
+
+exports.validarTutoriaEncerrada = async (req, res, next) => {
+  const { body } = req
+
+  const regras = {
+    resumo: 'required|string|max:200'
   }
 
   // Validações

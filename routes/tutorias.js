@@ -34,4 +34,17 @@ router.post(
   CONTROLLER_TUTORIAS.iniciarTutoria
 )
 
+router.patch(
+  '/:idTutoria/:idAluno/:idTutor',
+  MIDDLEWARE_TOKEN.acessoSomenteTutor,
+  MIDDLEWARE_ALUNOS.verificarExistenciaPorId,
+  MIDDLEWARE_TUTORES.verificarExistenciaPorId,
+  MIDDLEWARE_TUTORIAS.verificarExistenciaPorId,
+  MIDDLEWARE_TUTORES.verificarTutorAutenticado,
+  MIDDLEWARE_TUTORIAS.verificarDisciplinaDoAlunoJuntoComTutor,
+  MIDDLEWARE_TUTORIAS.verificarSeTutorEAlunoSaoDaMesmaTutoriaAtiva,
+  VALIDATION_TUTORIAS.validarTutoriaEncerrada,
+  CONTROLLER_TUTORIAS.encerrarTutoria
+)
+
 module.exports = router

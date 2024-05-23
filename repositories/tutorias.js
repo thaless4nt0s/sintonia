@@ -14,6 +14,12 @@ const HELPER_DATE = require('../helpers/date')
 
 /* ---- METHODS ---- */
 
+//buscar uma tutoria em especifico
+exports.buscarUm = async (filtros, select = {}) => {
+  return MODEL_TUTORIAS.findOne(filtros, select)
+}
+
+// iniciar uma tutoria
 exports.iniciarTutoria = async (idAluno, idTutor, idDisciplina, body) => {
   const session = await mongoose.startSession()
   session.startTransaction()
@@ -37,7 +43,35 @@ exports.iniciarTutoria = async (idAluno, idTutor, idDisciplina, body) => {
     await session.commitTransaction()
   } catch (error) {
     await session.abortTransaction()
-    next(error)
+  }finally {
+    session.endSession()
+  }
+}
+
+// encerra uma tutoria
+exports.encerrarTutoria = async (idTutoria, idAluno, idTutor, body) => {
+  const session = await mongoose.startSession()
+  session.startTransaction()
+  const { resumo } = body
+
+  try {
+    const tutoriaEncerrada = gerarTutoriaEncerrada(resumo)
+    await MODEL_TUTORIAS.findByIdAndUpdate(idTutoria, tutoriaEncerrada, { session })
+
+    const alunoAtualizado = await MODEL_ALUNOS.findByIdAndUpdate(
+      idAluno,
+      { emTutoria: false },
+      { new: true }
+    )
+
+    const tutorAtualizado = await MODEL_TUTORES.findByIdAndUpdate(
+      idTutor,
+      { emTutoria: false },
+      { new: true }
+    )
+    await session.commitTransaction()
+  } catch (error) {
+    await session.abortTransaction()
   }finally {
     session.endSession()
   }
@@ -51,6 +85,16 @@ function gerarTutoriaInicial (idAluno, idTutor, idDisciplina, titulo) {
   if (idAluno) tutoria.idTutor = idTutor
   if (idAluno) tutoria.idDisciplina = idDisciplina
   if (idAluno) tutoria.titulo = titulo
+
+  return tutoria
+}
+
+function gerarTutoriaEncerrada (resumo) {
+  const tutoria = {}
+
+  if (resumo) tutoria.resumo = resumo
+  tutoria.dataEncerramento = HELPER_DATE.now()
+  tutoria.tutoriaEncerrada = true
 
   return tutoria
 }
