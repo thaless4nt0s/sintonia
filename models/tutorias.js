@@ -53,7 +53,13 @@ module.exports = (mongoose) => {
       type: Date,
       immutable: true,
       default: function () { return HELPER_DATE.now() }
+    },
+
+    dataEncerramento: {
+      type: Date,
+      immutable: true
     }
+
   })
 
   return mongoose.model('Tutorias', schema)
