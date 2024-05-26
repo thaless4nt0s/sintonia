@@ -52,7 +52,6 @@ router.get(
   '/historico/tutor/:idTutor',
   MIDDLEWARE_TOKEN.acessoPorTodosOsUsuarios,
   MIDDLEWARE_TUTORES.verificarExistenciaPorId,
-  MIDDLEWARE_TUTORES.verificarTutorAutenticado,
   CONTROLLER_TUTORES.mostrarHistorico
 )
 
