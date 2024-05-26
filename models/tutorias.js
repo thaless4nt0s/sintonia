@@ -56,8 +56,7 @@ module.exports = (mongoose) => {
     },
 
     dataEncerramento: {
-      type: Date,
-      immutable: true
+      type: Date
     }
 
   })
