@@ -15,6 +15,7 @@ const MIDDLEWARE_TUTORIAS = require('../middlewares/tutorias')
 
 const CONTROLLER_TUTORIAS = require('../controllers/tutorias')
 const CONTROLLER_TUTORES = require('../controllers/tutores')
+const CONTROLLER_ALUNOS = require('../controllers/alunos')
 
 /* --- VALIDATIONS --- */
 
@@ -54,5 +55,13 @@ router.get(
   MIDDLEWARE_TUTORES.verificarExistenciaPorId,
   CONTROLLER_TUTORES.mostrarHistorico
 )
+
+router.get(
+  '/historico/aluno/:idAluno',
+  MIDDLEWARE_TOKEN.acessoPorTodosOsUsuarios,
+  MIDDLEWARE_ALUNOS.verificarExistenciaPorId,
+  CONTROLLER_ALUNOS.mostrarHistorico
+)
+
 
 module.exports = router

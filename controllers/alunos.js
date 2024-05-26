@@ -50,3 +50,15 @@ exports.remover = async (req, res, next) => {
     next(error)
   }
 }
+
+// mostrar historico
+exports.mostrarHistorico = async (req, res, next) => {
+  const { idAluno } = req.params
+  try {
+    const historico = await REPOSITORY_ALUNOS.mostrarHistorico(idAluno)
+    HELPER_RESPONSE.success(res, historico)
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+}
