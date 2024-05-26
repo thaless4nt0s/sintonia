@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 /* ---- MODELS ---- */
 
 const MODEL_TUTORES = mongoose.model('Tutores')
+const MODEL_TUTORIAS = mongoose.model('Tutorias')
 
 /* --- HELPERS --- */
 
@@ -77,6 +78,78 @@ exports.mostrarTodos = async (query) => {
 
   return tutores
 }
+
+//Mostrar historico
+exports.mostrarHistorico = async (idTutor) => {
+  const filtros = {
+    idTutor: new mongoose.Types.ObjectId(idTutor),
+  }
+
+  const select = {
+    titulo: 1,
+    resumo: 1,
+    emTutoria: 1,
+    dataRegistro: 1,
+    dataEncerramento: 1,
+    'disciplina.nome': 1,
+    'tutor.nome': 1,
+    'aluno.nome': 1,
+  }
+
+  return MODEL_TUTORIAS.aggregate([
+    {
+      $match: filtros
+    },
+    {
+      $lookup: {
+        from: 'tutores',
+        localField: 'idTutor',
+        foreignField: '_id',
+        as: 'tutor'
+      }
+    },
+    {
+      $unwind: '$tutor'
+    },
+    {
+      $lookup: {
+        from: 'alunos',
+        localField: 'idAluno',
+        foreignField: '_id',
+        as: 'aluno'
+      }
+    },
+    {
+      $unwind: '$aluno'
+    },
+    {
+      $lookup: {
+        from: 'disciplinas',
+        localField: 'idDisciplina',
+        foreignField: '_id',
+        as: 'disciplina'
+      }
+    },
+    {
+      $unwind: '$disciplina'
+    },
+    {
+      $addFields: {
+        emTutoria: {
+          $cond: { if: "$emTutoria", then: "Em andamento", else: "Finalizada" }
+        }
+      }
+    },
+    {
+      $project: select
+    },
+    {
+      $sort: {dataEncerramento: -1}
+    }
+  ])
+}
+
+
 
 /* --- AUX FUNCTIONS --- */
 

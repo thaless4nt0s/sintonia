@@ -58,3 +58,14 @@ exports.mostrarTodos = async (req, res, next) => {
     next(error)
   }
 }
+
+// mostrar historico de um tutor
+exports.mostrarHistorico = async (req, res, next) => {
+  const { idTutor } = req.params
+  try {
+    const historico = await REPOSITORY_TUTORES.mostrarHistorico(idTutor)
+    HELPER_RESPONSE.success(res, historico)
+  } catch (error) {
+    next(error)
+  }
+}

@@ -14,6 +14,7 @@ const MIDDLEWARE_TUTORIAS = require('../middlewares/tutorias')
 /* --- CONTROLLERS --- */
 
 const CONTROLLER_TUTORIAS = require('../controllers/tutorias')
+const CONTROLLER_TUTORES = require('../controllers/tutores')
 
 /* --- VALIDATIONS --- */
 
@@ -45,6 +46,14 @@ router.patch(
   MIDDLEWARE_TUTORIAS.verificarSeTutorEAlunoSaoDaMesmaTutoriaAtiva,
   VALIDATION_TUTORIAS.validarTutoriaEncerrada,
   CONTROLLER_TUTORIAS.encerrarTutoria
+)
+
+router.get(
+  '/historico/tutor/:idTutor',
+  MIDDLEWARE_TOKEN.acessoPorTodosOsUsuarios,
+  MIDDLEWARE_TUTORES.verificarExistenciaPorId,
+  MIDDLEWARE_TUTORES.verificarTutorAutenticado,
+  CONTROLLER_TUTORES.mostrarHistorico
 )
 
 module.exports = router
