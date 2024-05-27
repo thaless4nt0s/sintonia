@@ -58,7 +58,6 @@ exports.mostrarHistorico = async (req, res, next) => {
     const historico = await REPOSITORY_ALUNOS.mostrarHistorico(idAluno)
     HELPER_RESPONSE.success(res, historico)
   } catch (error) {
-    console.error(error)
     next(error)
   }
 }
