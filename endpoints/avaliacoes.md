@@ -23,3 +23,20 @@
 ```
 
 ---
+
+**DELETE** `/avaliacoes/:idAvaliacao`
+
+- **Descrição**: Endpoint responsável por remover uma avaliação.
+- **Autenticação**: Necessário.
+
+**Response**:
+
+```
+{
+  "status": "ok",
+  "statusCode": 200,
+  "body": "Avaliacao removida com sucesso !"
+}
+```
+
+---
