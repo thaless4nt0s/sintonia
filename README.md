@@ -40,6 +40,7 @@ pnpm dev
 | [Tutores](endpoints/tutores.md)               |
 | [Administradores](endpoints/admins.md)        |
 | [Tutorias](endpoints/tutorias.md)             |
+| [Avaliacoes](endpoints/avaliacoes.md)         |
 
 ---
 
