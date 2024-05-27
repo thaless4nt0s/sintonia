@@ -64,6 +64,20 @@ exports.verificarSeTutorEAlunoSaoDaMesmaTutoriaAtiva = async (req, res, next) =>
   }
 }
 
+exports.verificaSeTutoriaEstaAtiva = async (req, res, next) => {
+  const { idTutoria } = req.params
+  try {
+    const tutoriaAtiva = await REPOSITORY_TUTORIAS.buscarUm({ _id: idTutoria }, { tutoriaEncerrada: 1 })
+    if (tutoriaAtiva) {
+      HELPER_RESPONSE.simpleError(res, 406, 'A tutoria não está encerrada !')
+      return
+    }
+    next()
+  } catch (error) {
+    next(error)
+  }
+}
+
 /* --- AUX FUNCTIONS --- */
 function compararDisciplinasDeAlunosComTutores(idDisciplinaAluno, idDisciplinaTutor) {
   // Transformar idDisciplinaAluno em String caso não seja um array
