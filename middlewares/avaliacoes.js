@@ -45,3 +45,17 @@ exports.verificarSeJaExisteAlgumaAvaliacaoParaEstaTutoria = async (req, res, nex
     next(error)
   }
 }
+
+exports.verificarExistenciaPorId = async (req, res, next) => {
+  const { idAvaliacao } = req.params
+  try {
+    const avaliacao = await REPOSITORY_AVALIACOES.buscarUm({ _id: idAvaliacao }, { nota: 1 })
+    if (!avaliacao){
+      HELPER_RESPONSE.simpleError(res, 406, 'Avaliacao não existe !')
+      return
+    }
+    next()
+  } catch (error) {
+    next(error)
+  }
+}

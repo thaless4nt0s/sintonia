@@ -28,4 +28,11 @@ router.post(
   CONTROLLER_AVALIACOES.adicionar
 )
 
+router.delete(
+  '/:idAvaliacao',
+  MIDDLEWARE_TOKEN.acessoSomenteAdministrador,
+  MIDDLEWARE_AVALIACOES.verificarExistenciaPorId,
+  CONTROLLER_AVALIACOES.remover
+)
+
 module.exports = router

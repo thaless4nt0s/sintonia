@@ -24,6 +24,11 @@ exports.adicionar = async (idTutoria, body) => {
   return MODEL_AVALIACOES.create(avaliacao)
 }
 
+// remover uma avaliacao
+exports.remover = async (idAvaliacao) => {
+  return MODEL_AVALIACOES.findByIdAndDelete(idAvaliacao)
+}
+
 /* --- AUXILIARY FUNCTIONS --- */
 function gerarAvaliacao (idTutoria, dados) {
   const avaliacao = {}
