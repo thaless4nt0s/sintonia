@@ -16,6 +16,12 @@ module.exports = (mongoose) => {
       required: [true, 'É necessário ter uma tutoria para avaliar']
     },
 
+    idTutor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Tutores',
+      required: [true, 'É necessário ter uma tutoria para avaliar']
+    },
+
     comentario: {
       type: String,
       trim: true,
