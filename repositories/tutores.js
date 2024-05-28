@@ -199,7 +199,60 @@ exports.mostrarHistorico = async (idTutor) => {
   ])
 }
 
+// exibe os dados de somente um tutor
+exports.receberPorId = async (idTutor) => {
 
+  const filtros = {
+    _id: new mongoose.Types.ObjectId(idTutor),
+  }
+
+  const select = {
+    'nome': 1,
+    'email': 1,
+    'semestre': 1,
+    'disciplinas.nome': 1,
+    'avaliacoes.comentario': 1,
+    'avaliacoes.dataRegistro': 1,
+    'avaliacoes.nota': 1,
+    media: 1
+  }
+
+  return MODEL_TUTORES.aggregate([
+    {
+      $match: filtros
+    },
+    {
+      $lookup: {
+        from: 'disciplinas',
+        localField: 'idDisciplina',
+        foreignField: '_id',
+        as: 'disciplinas'
+      }
+    },
+    {
+      $lookup: {
+        from: 'avaliacoes',
+        localField: '_id',
+        foreignField: 'idTutor',
+        as: 'avaliacoes'
+      }
+    },
+    {
+      $addFields: {
+        media: { $round: [{ $avg: "$avaliacoes.nota" }, 1] },
+        'avaliacoes.dataRegistro': {
+          $dateToString: {
+            date: '$dataRegistro',
+            format: '%d/%m/%Y'
+          }
+        }
+      }
+    },
+    {
+      $project: select
+    }
+  ])
+}
 
 /* --- AUX FUNCTIONS --- */
 

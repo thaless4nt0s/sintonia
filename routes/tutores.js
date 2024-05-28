@@ -26,6 +26,13 @@ router.get(
   CONTROLLER_TUTORES.mostrarTodos
 )
 
+router.get(
+  '/:idTutor',
+  MIDDLEWARE_TOKEN.acessoPorTodosOsUsuarios,
+  MIDDLEWARE_TUTORES.verificarExistenciaPorId,
+  CONTROLLER_TUTORES.receberPorId
+)
+
 router.patch(
   '/:idTutor',
   MIDDLEWARE_TOKEN.acessoSomenteTutor,

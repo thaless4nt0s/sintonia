@@ -69,3 +69,14 @@ exports.mostrarHistorico = async (req, res, next) => {
     next(error)
   }
 }
+
+// mostrar um tutor em especifico
+exports.receberPorId = async (req, res, next) => {
+  const { idTutor } = req.params
+  try {
+    const [tutor] = await REPOSITORY_TUTORES.receberPorId(idTutor)
+    HELPER_RESPONSE.success(res, tutor)
+  } catch (error) {
+    next(error)
+  }
+}
