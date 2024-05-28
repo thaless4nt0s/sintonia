@@ -67,11 +67,12 @@ exports.verificarSeTutorEAlunoSaoDaMesmaTutoriaAtiva = async (req, res, next) =>
 exports.verificaSeTutoriaEstaAtiva = async (req, res, next) => {
   const { idTutoria } = req.params
   try {
-    const { tutoriaEncerrada } = await REPOSITORY_TUTORIAS.buscarUm({ _id: idTutoria }, { tutoriaEncerrada: 1 })
+    const { tutoriaEncerrada, idTutor } = await REPOSITORY_TUTORIAS.buscarUm({ _id: idTutoria }, { tutoriaEncerrada: 1, idTutor: 1 })
     if (!tutoriaEncerrada) {
       HELPER_RESPONSE.simpleError(res, 406, 'A tutoria não está encerrada !')
       return
     }
+    res.locals.idTutor = idTutor
     next()
   } catch (error) {
     next(error)

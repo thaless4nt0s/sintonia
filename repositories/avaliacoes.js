@@ -19,8 +19,8 @@ exports.buscarUm = async (filtros, select = {}) => {
 
 
 // adicionar
-exports.adicionar = async (idTutoria, body) => {
-  const avaliacao = gerarAvaliacao(idTutoria, body)
+exports.adicionar = async (idTutoria, idTutor, body) => {
+  const avaliacao = gerarAvaliacao(idTutoria, idTutor, body)
   return MODEL_AVALIACOES.create(avaliacao)
 }
 
@@ -30,10 +30,10 @@ exports.remover = async (idAvaliacao) => {
 }
 
 /* --- AUXILIARY FUNCTIONS --- */
-function gerarAvaliacao (idTutoria, dados) {
+function gerarAvaliacao (idTutoria, idTutor, dados) {
   const avaliacao = {}
   avaliacao.idTutoria = idTutoria
-
+  avaliacao.idTutor = idTutor
   if (dados.comentario) avaliacao.comentario = dados.comentario
   if (dados.nota) avaliacao.nota = dados.nota
 

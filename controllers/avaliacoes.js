@@ -12,8 +12,9 @@ const HELPER_RESPONSE = require('../helpers/response')
 exports.adicionar = async (req, res, next) => {
   const { idTutoria } = req.params
   const { body } = req
+  const { idTutor } = res.locals
   try {
-    await REPOSITORY_AVALIACOES.adicionar(idTutoria, body)
+    await REPOSITORY_AVALIACOES.adicionar(idTutoria, idTutor, body)
     HELPER_RESPONSE.success(res, 'Avaliação realizada com sucesso !')
   } catch (error) {
     next(error)
