@@ -42,4 +42,61 @@
 }
 ```
 
+
+
+**GET** `/alunos/:idAluno`
+
+- **Descrição**: Endpoint responsável por mostrar os dados de um aluno.
+- **Autenticação**: Necessário.
+
+**Response**:
+
+```
+{
+  "status":"ok",
+  "statusCode":200,
+  "body":[
+    {
+      "_id":"6643b7e345413309bb82ffc5",
+      "nome":"Neymar jr",
+      "email":"neymar.jr.00@aluno.ifce.edu.br",
+      "matricula":"20241045050000",
+      "disciplina":{
+        "nome":"Cálculo 1"
+      },
+      "tutorias":[
+        [
+          {
+            "titulo":"duvidas sobre integral",
+            "dataRegistro":"14/05/2024",
+            "status":"Finalizada"
+          },
+          {
+            "titulo":"Como fazer a letra A ?",
+            "dataRegistro":"14/05/2024",
+            "status":"Finalizada"
+          },
+          {
+            "titulo":"Como fazer a letra C ?",
+            "dataRegistro":"14/05/2024",
+            "status":"Finalizada"
+          },
+          {
+            "titulo":"Como fazer a letra W ?",
+            "dataRegistro":"14/05/2024",
+            "status":"Finalizada"
+          },
+          {
+            "titulo":"Como fazer a letra d ?",
+            "dataRegistro":"14/05/2024",
+            "status":"Finalizada"
+          }
+        ]
+      ],
+      "emTutoria":"Não está em tutoria no momento"
+    }
+  ]
+}
+```
+
 ---
