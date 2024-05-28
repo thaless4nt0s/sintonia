@@ -102,3 +102,44 @@
 ```
 
 ---
+
+**GET** `/tutores/:idTutor`
+
+- **Descrição**: Endpoint responsável por mostrar um tutor.
+- **Autenticação**: Necessário
+
+**Response**:
+
+```
+{
+  "status":"ok",
+  "statusCode":200,
+  "body":{
+    "_id":"664de15776e2a0d4310f31e9",
+    "nome":"Henrique Leitão",
+    "email":"henrique.leitao.01@aluno.ifce.edu.br",
+    "semestre":1,
+    "disciplinas":[
+      {
+        "nome":"LIBRAS"
+      },
+      {
+        "nome":"Cálculo 1"
+      }
+    ],
+    "avaliacoes":[
+      {
+        "comentario":"Ele ensina de maneira diferenciada !",
+        "nota":5,
+        "dataRegistro": "22/05/2024"
+      },
+      {
+        "comentario":"nada dms",
+        "nota":3,
+        "dataRegistro": "22/05/2024"
+      }
+    ],
+    "media":4
+  }
+}
+```
