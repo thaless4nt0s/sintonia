@@ -38,23 +38,28 @@ exports.remover = async (idTutor) => {
 
 // mostrar todos os tutores
 exports.mostrarTodos = async (query) => {
-  const { alfabetoCrescente } = query
+  const { alfabetoCrescente, mediaDecrescente } = query
   let sort = { nome: 1 }
 
   if (alfabetoCrescente === 'false') {
     sort = { nome: -1 }
   }
 
+  if (mediaDecrescente === 'true') {
+    sort = { media: -1 }
+  }
+
   const select = {
     nome: 1,
     semestre: 1,
     'disciplinas.nome': 1,
-    emTutoria: 1
+    emTutoria: 1,
+    media: 1
   }
 
   const tutores = await MODEL_TUTORES.aggregate([
     {
-      $lookup:{
+      $lookup: {
         from: 'disciplinas',
         localField: 'idDisciplina',
         foreignField: '_id',
@@ -62,10 +67,55 @@ exports.mostrarTodos = async (query) => {
       }
     },
     {
+      $lookup: {
+        from: 'tutorias',
+        localField: '_id',
+        foreignField: 'idTutor',
+        as: 'tutorias'
+      }
+    },
+    {
+      $unwind: {
+        path: '$tutorias',
+        preserveNullAndEmptyArrays: true // Preservar documentos sem tutorias
+      }
+    },
+    {
+      $lookup: {
+        from: 'avaliacoes',
+        localField: 'tutorias._id',
+        foreignField: 'idTutoria',
+        as: 'avaliacoes'
+      }
+    },
+    {
+      $unwind: {
+        path: '$avaliacoes',
+        preserveNullAndEmptyArrays: true // Preservar documentos sem avaliações
+      }
+    },
+    {
+      $group: {
+        _id: '$_id',
+        nome: { $first: '$nome' },
+        semestre: { $first: '$semestre' },
+        disciplinas: { $first: '$disciplinas' },
+        emTutoria: { $first: '$emTutoria' },
+        avaliacoes: { $push: '$avaliacoes' },
+        media: { $avg: '$avaliacoes.nota' } // Calculando a média das notas
+      }
+    },
+    {
       $addFields: {
         emTutoria: {
           $cond: { if: "$emTutoria", then: "sim", else: "não" }
-        }
+        },
+        media: { $round: ['$media', 1] } // Substituir média nula por "N/A"
+      }
+    },
+    {
+      $addFields: {
+        media: { $ifNull: ['$media', 'N/A'] } // Substituir média nula por "N/A"
       }
     },
     {

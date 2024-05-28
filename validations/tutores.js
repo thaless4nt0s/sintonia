@@ -82,6 +82,7 @@ exports.mostrarTodos = async (req, res, next) => {
 
   const regras = {
     alfabetoCrescente: 'boolean',
+    mediaDecrescente: 'boolean',
   }
 
   // Validações
