@@ -39,4 +39,10 @@ router.delete(
   CONTROLLER_ALUNOS.remover
 )
 
+router.get(
+  '/:idAluno',
+  MIDDLEWARE_TOKEN.acessoPorTodosOsUsuarios,
+  CONTROLLER_ALUNOS.receberPorId
+)
+
 module.exports = router

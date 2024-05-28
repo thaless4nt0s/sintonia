@@ -37,6 +37,7 @@ exports.remover = async (idAluno) => {
   return MODEL_ALUNOS.findByIdAndDelete(idAluno)
 }
 
+// mostrar historico de um aluno
 exports.mostrarHistorico = async (idAluno) => {
   const filtros = {
     idAluno: new mongoose.Types.ObjectId(idAluno),
@@ -102,6 +103,81 @@ exports.mostrarHistorico = async (idAluno) => {
     },
     {
       $sort: {dataEncerramento: -1}
+    }
+  ])
+}
+
+// mostrar um aluno em especifico
+exports.receberPorId = async (idAluno) => {
+  const filtros = {
+    _id: new mongoose.Types.ObjectId(idAluno)
+  }
+
+  const select = {
+    nome: 1,
+    email: 1,
+    matricula: 1,
+    'disciplina.nome': 1,
+    emTutoria: {
+      $cond: { if: "$emTutoria", then: "Em tutoria", else: "Não está em tutoria no momento" }
+    },
+    'tutorias.titulo': 1,
+    'tutorias.dataRegistro': 1,
+    'tutorias.status': 1
+  }
+
+  return MODEL_ALUNOS.aggregate([
+    {
+      $match: filtros
+    },
+    {
+      $lookup: {
+        from: 'disciplinas',
+        localField: 'idDisciplina',
+        foreignField: '_id',
+        as: 'disciplina'
+      }
+    },
+    {
+      $unwind: {
+        path: '$disciplina',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: 'tutorias',
+        localField: '_id',
+        foreignField: 'idAluno',
+        as: 'tutorias'
+      }
+    },
+    {
+      $addFields: {
+        'tutorias.status': {
+          $cond: { if: "$tutorias.tutoriaEncerrada", then: "Finalizada", else: "Em andamento" }
+        },
+        'tutorias.dataRegistro': {
+          $dateToString: {
+            date: '$dataRegistro',
+            format: '%d/%m/%Y'
+          }
+        }
+      }
+    },
+    {
+      $group: {
+        _id: '$_id',
+        nome: { $first: '$nome' },
+        email: { $first: '$email' },
+        matricula: { $first: '$matricula' },
+        disciplina: { $first: '$disciplina' },
+        emTutoria: { $first: '$emTutoria' },
+        tutorias: { $push: '$tutorias' }
+      }
+    },
+    {
+      $project: select
     }
   ])
 }

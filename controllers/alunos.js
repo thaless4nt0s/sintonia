@@ -61,3 +61,15 @@ exports.mostrarHistorico = async (req, res, next) => {
     next(error)
   }
 }
+
+// mostrar um aluno em especifico
+exports.receberPorId = async (req, res, next) => {
+  const { idAluno } = req.params
+
+  try {
+    const aluno = await REPOSITORY_ALUNOS.receberPorId(idAluno)
+    HELPER_RESPONSE.success(res, aluno)
+  } catch (error) {
+    next(error)
+  }
+}
