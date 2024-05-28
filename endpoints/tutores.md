@@ -45,7 +45,7 @@
 
 ---
 
-**GET** `/tutores?alfabetoCrescente={}`
+**GET** `/tutores?alfabetoCrescente={}&mediaDecrescente={}`
 
 - **Descrição**: Endpoint responsável por mostrar todos os tutores.
 - **Autenticação**: Necessário
@@ -55,44 +55,47 @@
 | CAMPO             | TIPO    | OBRIGATÓRIO   | EXEMPLO                        |
 | ----------------- | ------- | ------------- | ------------------------------ |
 | alfabetoCrescente | boolean | Não           | true                           |
+| mediaCrescente    | boolean | Não           | true                           |
 
 **Response**:
 
 ```
 {
-  "status": "ok",
-  "statusCode": 200,
-  "body": [
+  "status":"ok",
+  "statusCode":200,
+  "body":[
     {
-      "_id": "664e2e9b005e042583f69f49",
-      "nome": "Mario Sérgio",
-      "semestre": 3,
-      "emTutoria": "não",
-      "disciplinas": [
+      "_id":"664e2e9b005e042583f69f49",
+      "nome":"Mario Sérgio",
+      "semestre":3,
+      "disciplinas":[
         {
-            "nome": "Lógica para computação"
+          "nome":"LIBRAS"
         },
         {
-            "nome": "Cálculo 1"
+          "nome":"Lógica para computação"
         },
         {
-            "nome": "LIBRAS"
+          "nome":"Cálculo 1"
         }
-      ]
+      ],
+      "emTutoria":"não",
+      "media":"N/A"
     },
     {
-      "_id": "664de15776e2a0d4310f31e9",
-      "nome": "Henrique Leitão",
-      "semestre": 1,
-      "emTutoria": "sim",
-      "disciplinas": [
+      "_id":"664de15776e2a0d4310f31e9",
+      "nome":"Henrique Leitão",
+      "semestre":1,
+      "disciplinas":[
         {
-            "nome": "Cálculo 1"
+          "nome":"LIBRAS"
         },
         {
-            "nome": "LIBRAS"
+          "nome":"Cálculo 1"
         }
-      ]
+      ],
+      "emTutoria":"não",
+      "media":2.7
     }
   ]
 }
