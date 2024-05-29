@@ -31,7 +31,7 @@
 
 **POST** `/registrar/tutor`
 
-- **Descrição**: Endpoint responsável por registrar um aluno.
+- **Descrição**: Endpoint responsável por registrar um tutor.
 - **Autenticação**: Não é necessário.
 
 **Query**:
@@ -61,7 +61,7 @@
 
 **POST** `/registrar/administrador`
 
-- **Descrição**: Endpoint responsável por registrar um aluno.
+- **Descrição**: Endpoint responsável por registrar um administrador.
 - **Autenticação**: Necessário.
 
 **Query**:
