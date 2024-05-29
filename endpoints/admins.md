@@ -34,9 +34,9 @@
 
 ---
 
-**POST** `/administrador`
+**POST** `/administradores`
 
-- **Descrição**: Endpoint responsável por registrar um aluno.
+- **Descrição**: Endpoint responsável por registrar um administrador.
 - **Autenticação**: Necessário.
 
 **Query**:
@@ -46,6 +46,31 @@
 | nome         | string | Sim           | Neymar jr                      |                                |
 | email        | string | Sim           | neymar.jr.00@aluno.ifce.edu.br | somente @ifce.edu.br           |
 | senha        | string | Sim           | 12345678                       | De 8 até - caracteres          |
+
+**Response**:
+
+```
+  {
+    "status": "ok",
+    "statusCode": 200,
+    "body": "Um administrador foi adicionado com sucesso !"
+  }
+
+```
+
+---
+
+**GET** `/administradores`
+
+- **Descrição**: Endpoint responsável por mostrar todos os administradores do sistema.
+- **Autenticação**: Necessário.
+
+**Query**:
+
+| CAMPO             | TIPO    | OBRIGATÓRIO   | EXEMPLO                        |
+| ----------------- | ------- | ------------- | ------------------------------ |
+| alfabetoCrescente | boolean | Não           | true                           |
+
 
 **Response**:
 
