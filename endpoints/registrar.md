@@ -78,7 +78,7 @@
   {
     "status": "ok",
     "statusCode": 200,
-    "body": "Um tutor foi adicionado com sucesso !"
+    "body": "Um administrador foi adicionado com sucesso !"
   }
 
 ```
