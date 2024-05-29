@@ -216,6 +216,83 @@ exports.receberPorId = async (idAluno) => {
   ])
 }
 
+// mostrar todos os alunos
+exports.receberTodos = async () => {
+  const select = {
+    nome: 1,
+    email: 1,
+    matricula: 1,
+    'disciplina.nome': 1,
+    dataRegistro: 1,
+    emTutoria: {
+      $cond: { if: "$emTutoria", then: "Em tutoria", else: "Não está em tutoria no momento" }
+    },
+    'tutorias._id': 1,
+    'tutorias.titulo': 1,
+    'tutorias.dataRegistro': 1,
+    'tutorias.status': 1
+  }
+
+  return MODEL_ALUNOS.aggregate([
+    {
+      $lookup: {
+        from: 'disciplinas',
+        localField: 'idDisciplina',
+        foreignField: '_id',
+        as: 'disciplina'
+      }
+    },
+    {
+      $unwind: {
+        path: '$disciplina',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $lookup: {
+        from: 'tutorias',
+        localField: '_id',
+        foreignField: 'idAluno',
+        as: 'tutorias'
+      }
+    },
+    {
+      $addFields: {
+        'tutorias.status': {
+          $cond: { if: "$tutorias.tutoriaEncerrada", then: "Finalizada", else: "Em andamento" }
+        },
+        'tutorias.dataRegistro': {
+          $dateToString: {
+            date: '$dataRegistro',
+            format: '%d/%m/%Y'
+          }
+        },
+        dataRegistro: {
+          $dateToString: {
+            date: '$dataRegistro',
+            format: '%d/%m%Y'
+          }
+        }
+      }
+    },
+    {
+      $group: {
+        _id: '$_id',
+        nome: { $first: '$nome' },
+        email: { $first: '$email' },
+        matricula: { $first: '$matricula' },
+        disciplina: { $first: '$disciplina' },
+        emTutoria: { $first: '$emTutoria' },
+        dataRegistro: { $first: '$dataRegistro'},
+        tutorias: { $push: '$tutorias' }
+      }
+    },
+    {
+      $project: select
+    }
+  ])
+}
+
 /* --- AUX FUNCTIONS --- */
 
 function gerarAluno(dados) {

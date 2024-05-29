@@ -45,4 +45,10 @@ router.get(
   CONTROLLER_ALUNOS.receberPorId
 )
 
+router.get(
+  '/',
+  MIDDLEWARE_TOKEN.acessoPorTodosOsUsuarios,
+  CONTROLLER_ALUNOS.receberTodos
+)
+
 module.exports = router

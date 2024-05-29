@@ -73,3 +73,13 @@ exports.receberPorId = async (req, res, next) => {
     next(error)
   }
 }
+
+// mostrar todos os alunos cadastrados
+exports.receberTodos = async (req, res, next) => {
+  try {
+    const alunos = await REPOSITORY_ALUNOS.receberTodos()
+    HELPER_RESPONSE.success(res, alunos)
+  } catch (error) {
+    next(error)
+  }
+}
