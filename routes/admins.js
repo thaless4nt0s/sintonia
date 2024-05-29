@@ -13,6 +13,11 @@ const MIDDLEWARE_ALUNOS = require('../middlewares/alunos')
 
 const CONTROLLER_TUTORES = require('../controllers/tutores')
 const CONTROLLER_ALUNOS = require('../controllers/alunos')
+const CONTROLLER_ADMINS = require('../controllers/admins')
+
+/* --- VALIDATIONS --- */
+
+const VALIDATION_ADMINS = require('../validations/admins')
 
 /* --- METHODS --- */
 
@@ -29,5 +34,13 @@ router.delete(
   MIDDLEWARE_ALUNOS.verificarExistenciaPorId,
   CONTROLLER_ALUNOS.remover
 )
+
+router.post(
+  '/',
+  MIDDLEWARE_TOKEN.acessoSomenteAdministrador,
+  VALIDATION_ADMINS.adicionar,
+  CONTROLLER_ADMINS.adicionar
+)
+
 
 module.exports = router
