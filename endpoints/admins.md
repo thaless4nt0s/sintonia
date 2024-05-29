@@ -97,3 +97,20 @@
 ```
 
 ---
+
+**PATCH** `/administradores/resetar-senha/:id`
+
+- **Descrição**: Endpoint responsável por resetar a senha de qualquer usuário (administrador, tutor ou aluno).
+- **Autenticação**: Necessário
+
+**Response**:
+
+```
+{
+  "status": "ok",
+  "statusCode": 200,
+  "body": "Senha resetada para 12345678"
+}
+```
+
+---
