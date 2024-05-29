@@ -75,11 +75,24 @@
 **Response**:
 
 ```
-  {
-    "status": "ok",
-    "statusCode": 200,
-    "body": "Um tutor foi adicionado com sucesso !"
-  }
+{
+  "status":"ok",
+  "statusCode":200,
+  "body":[
+    {
+      "_id":"66450d5d4fe9b14e91d48d73",
+      "nome":"Fábio José",
+      "email":"fabio.jose@ifce.edu.br",
+      "dataRegistro":"2024-05-15T19:30:37.000Z"
+    },
+    {
+      "_id":"66576e1a1f6b6f51ae7e7cdb",
+      "nome":"thales da silva santos",
+      "email":"thales.silva.santos@ifce.edu.br",
+      "dataRegistro":"2024-05-29T18:04:10.000Z"
+    }
+  ]
+}
 
 ```
 
