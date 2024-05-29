@@ -2,9 +2,15 @@
 
 const mongoose = require('mongoose')
 
+/* ---- HELPERS ---- */
+
+const HELPER_SENHA = require('../helpers/passwords')
+
 /* ---- MODELS ---- */
 
 const MODEL_ADMINS = mongoose.model('Admins')
+const MODEL_TUTORES = mongoose.model('Tutores')
+const MODEL_ALUNOS = mongoose.model('Alunos')
 
 /* ---- METHODS ---- */
 
@@ -44,6 +50,20 @@ exports.receberTodos = async (query) => {
   ])
 }
 
+exports.resetarSenha = async (id, tipoUsuario) => {
+
+  const MODELS = {
+    aluno: MODEL_ALUNOS,
+    tutor: MODEL_TUTORES,
+    admiin: MODEL_ADMINS
+  }
+
+  const model = MODELS[tipoUsuario]
+  const novaSenha = await HELPER_SENHA.criptografarSenha('12345678')
+  const atualizado = await model.findByIdAndUpdate(id, {senha: novaSenha}, { new: true } )
+  console.log(atualizado)
+}
+
 /* --- AUX FUNCTIONS --- */
 
 function gerarAdmin(dados) {
@@ -56,4 +76,3 @@ function gerarAdmin(dados) {
 
   return admin
 }
-

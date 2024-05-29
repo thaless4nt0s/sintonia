@@ -32,3 +32,15 @@ exports.receberTodos = async (req, res, next) => {
     next(error)
   }
 }
+
+// resetar a senha de um usuário
+exports.resetarSenha = async (req, res, next) => {
+  const { id } = req.params
+  const { tipoUsuario } = res.locals
+  try {
+    await REPOSITORY_ADMINS.resetarSenha(id, tipoUsuario)
+    HELPER_RESPONSE.success(res, 'Senha resetada para 12345678')
+  } catch (error) {
+    next(error)
+  }
+}

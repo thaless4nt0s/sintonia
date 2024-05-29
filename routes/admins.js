@@ -8,6 +8,7 @@ const router = express.Router()
 const MIDDLEWARE_TOKEN = require('../middlewares/token')
 const MIDDLEWARE_TUTORES = require('../middlewares/tutores')
 const MIDDLEWARE_ALUNOS = require('../middlewares/alunos')
+const MIDDLEWARE_IDS = require('../middlewares/ids')
 
 /* --- CONTROLLERS --- */
 
@@ -47,6 +48,13 @@ router.get(
   MIDDLEWARE_TOKEN.acessoPorTodosOsUsuarios,
   VALIDATION_ADMINS.receberTodos,
   CONTROLLER_ADMINS.receberTodos
+)
+
+router.patch(
+  '/resetar-senha/:id',
+  MIDDLEWARE_TOKEN.acessoSomenteAdministrador,
+  MIDDLEWARE_IDS.verificarExistenciaDoId,
+  CONTROLLER_ADMINS.resetarSenha
 )
 
 module.exports = router
