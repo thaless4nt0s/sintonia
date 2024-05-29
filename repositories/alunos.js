@@ -48,10 +48,18 @@ exports.mostrarHistorico = async (idAluno) => {
     resumo: 1,
     emTutoria: 1,
     dataRegistro: 1,
-    dataEncerramento: 1,
+    dataEncerramento: {
+      $dateToString: {
+        date: '$dataEncerramento',
+        format: '%d/%m/%Y'
+      }
+    },
     'disciplina.nome': 1,
     'tutor.nome': 1,
     'aluno.nome': 1,
+    'avaliacoes.nota': 1,
+    'avaliacoes.comentario': 1,
+    'avaliacoes.dataRegistro': 1
   }
 
   return MODEL_TUTORIAS.aggregate([
@@ -92,9 +100,35 @@ exports.mostrarHistorico = async (idAluno) => {
       $unwind: '$disciplina'
     },
     {
+      $lookup: {
+        from: 'avaliacoes',
+        localField: '_id',
+        foreignField: 'idTutoria',
+        as: 'avaliacoes'
+      }
+    },
+    {
+      $unwind: {
+        path: '$avaliacoes',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
       $addFields: {
         emTutoria: {
           $cond: { if: "$emTutoria", then: "Em andamento", else: "Finalizada" }
+        },
+        'avaliacoes.dataRegistro': {
+          $dateToString: {
+            date: '$dataRegistro',
+            format: '%d/%m/%Y'
+          }
+        },
+        dataRegistro: {
+          $dateToString: {
+            date: '$dataRegistro',
+            format: '%d/%m/%Y'
+          }
         }
       }
     },
