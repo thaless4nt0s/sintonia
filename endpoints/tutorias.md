@@ -59,11 +59,33 @@
   "statusCode":200,
   "body":[
     {
+      "_id":"664f95d60dbc7dac9435a8f5",
+      "titulo":"Como fazer a letra A ?",
+      "dataRegistro":"23/05/2024",
+      "resumo":"Nesta tutoria ensinei como fazer a letra A em LIBRAS",
+      "dataEncerramento":"27/05/2024",
+      "tutor":{
+        "nome":"Henrique Leitão"
+      },
+      "aluno":{
+        "nome":"Neymar jr"
+      },
+      "disciplina":{
+        "nome":"Cálculo 1"
+      },
+      "avaliacoes":{
+        "comentario":"Ele ensina de maneira terrivel !",
+        "nota":2,
+        "dataRegistro":"23/05/2024"
+      },
+      "emTutoria":"Finalizada"
+    },
+    {
       "_id":"664f4d5f2bd9148dd930afd7",
       "titulo":"duvidas sobre integral",
-      "dataRegistro":"2024-05-23T14:06:23.000Z",
+      "dataRegistro":"23/05/2024",
       "resumo":"Nesta tutoria foi mostrado ao aluno como é possivel  utilizar os calculos de integrais no dia a dia",
-      "dataEncerramento":"2024-05-26T19:17:33.000Z",
+      "dataEncerramento":"26/05/2024",
       "tutor":{
         "nome":"Henrique Leitão"
       },
@@ -73,22 +95,10 @@
       "disciplina":{
         "nome":"LIBRAS"
       },
-      "emTutoria":"Finalizada"
-    },
-    {
-      "_id":"664f95d60dbc7dac9435a8f5",
-      "titulo":"Como fazer a letra A ?",
-      "dataRegistro":"2024-05-23T19:15:34.000Z",
-      "resumo":"Nesta tutoria ensinei como fazer a letra A em LIBRAS",
-      "dataEncerramento":"2024-05-26T19:17:33.000Z",
-      "tutor":{
-        "nome":"Henrique Leitão"
-      },
-      "aluno":{
-        "nome":"Neymar jr"
-      },
-      "disciplina":{
-        "nome":"Cálculo 1"
+      "avaliacoes":{
+        "comentario":"Ele ensina de maneira diferenciada !",
+        "nota":5,
+        "dataRegistro":"23/05/2024"
       },
       "emTutoria":"Finalizada"
     }
