@@ -42,5 +42,11 @@ router.post(
   CONTROLLER_ADMINS.adicionar
 )
 
+router.get(
+  '/',
+  MIDDLEWARE_TOKEN.acessoPorTodosOsUsuarios,
+  VALIDATION_ADMINS.receberTodos,
+  CONTROLLER_ADMINS.receberTodos
+)
 
 module.exports = router

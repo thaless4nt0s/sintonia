@@ -21,3 +21,14 @@ exports.adicionar = async (req, res, next) => {
     next(error)
   }
 }
+
+// mostrar todos os admins
+exports.receberTodos = async (req, res, next) => {
+  const { query } = req
+  try {
+    const admins = await REPOSITORY_ADMINS.receberTodos(query)
+    HELPER_RESPONSE.success(res, admins)
+  } catch (error) {
+    next(error)
+  }
+}

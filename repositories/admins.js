@@ -19,6 +19,31 @@ exports.adicionar = async (body) => {
   return MODEL_ADMINS.create(admin)
 }
 
+// mostrar todos os admins
+exports.receberTodos = async (query) => {
+  const { alfabetoCrescente } = query
+  let sort = { nome: 1 }
+  if (alfabetoCrescente === 'false') {
+    sort = { nome: -1 }
+  }
+
+  const select = {
+    nome: 1,
+    email: 1,
+    dataRegistro: 1
+  }
+  console.log(sort)
+
+  return MODEL_ADMINS.aggregate([
+    {
+      $project: select
+    },
+    {
+      $sort: sort
+    }
+  ])
+}
+
 /* --- AUX FUNCTIONS --- */
 
 function gerarAdmin(dados) {
