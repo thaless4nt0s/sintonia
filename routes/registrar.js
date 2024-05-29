@@ -42,7 +42,6 @@ router.post(
   '/administrador',
   VALIDATION_ADMINS.adicionar,
   MIDDLEWARE.buscarEmailExistente,
-  MIDDLEWARE.buscarMatriculaExistente,
   CONTROLLER_ADMINS.adicionar
 )
 
