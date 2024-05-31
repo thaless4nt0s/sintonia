@@ -1,0 +1,10 @@
+{
+  "testPathIgnorePatterns": [
+    "/node_modules/",
+    "/.git/"
+  ],
+  "forceExit": true,
+  "setupFilesAfterEnv": [
+    "<rootDir>/setup.js"
+  ]
+}

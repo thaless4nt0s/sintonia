@@ -1,9 +1,7 @@
 /* ---- METHODS ---- */
 
 async function conectar (mongoose) {
-  const mode = process.env.MODE
   const connectionString = process.env.MONGO_STRING
-
   const options = {}
   options.serverSelectionTimeoutMS = 5000
   options.dbName = 'sintonia'
@@ -20,6 +18,7 @@ function conectado () {
 }
 
 function erro (error) {
+  console.error(error)
   console.error('A conexão com o banco de dados foi encerrada.')
   setTimeout(() => process.exit(0), 5000)
 }

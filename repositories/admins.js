@@ -38,7 +38,6 @@ exports.receberTodos = async (query) => {
     email: 1,
     dataRegistro: 1
   }
-  console.log(sort)
 
   return MODEL_ADMINS.aggregate([
     {
@@ -51,7 +50,6 @@ exports.receberTodos = async (query) => {
 }
 
 exports.resetarSenha = async (id, tipoUsuario) => {
-
   const MODELS = {
     aluno: MODEL_ALUNOS,
     tutor: MODEL_TUTORES,
@@ -60,14 +58,13 @@ exports.resetarSenha = async (id, tipoUsuario) => {
 
   const model = MODELS[tipoUsuario]
   const novaSenha = await HELPER_SENHA.criptografarSenha('12345678')
-  const atualizado = await model.findByIdAndUpdate(id, {senha: novaSenha}, { new: true } )
-  console.log(atualizado)
+  await model.findByIdAndUpdate(id, { senha: novaSenha }, { new: true })
 }
 
 /* --- AUX FUNCTIONS --- */
 
-function gerarAdmin(dados) {
-  const { nome, email, senha} = dados
+function gerarAdmin (dados) {
+  const { nome, email, senha } = dados
   const admin = {}
 
   if (nome) admin.nome = nome
