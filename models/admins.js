@@ -25,7 +25,7 @@ module.exports = (mongoose) => {
       trim: true,
       lowercase: true,
       index: true,
-      max: 100,
+      maxlength: 100,
       validate: [
         HELPER_VALIDATION.validateEmailInstitucionalServidor,
         'O campo Email deve ser um email válido'
