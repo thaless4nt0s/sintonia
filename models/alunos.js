@@ -25,7 +25,7 @@ module.exports = (mongoose) => {
       trim: true,
       lowercase: true,
       index: true,
-      max: 100,
+      maxlength: 100,
       validate: [
         HELPER_VALIDATION.validateEmailInstitucionalDeAlunoOuTutor,
         'O campo Email deve ser um email válido'
@@ -36,7 +36,7 @@ module.exports = (mongoose) => {
       type: String,
       trim: true,
       required: [true, 'O campo Matricula é obrigatório'],
-      unique: true,
+      unique: true
     },
 
     emTutoria: {
@@ -61,7 +61,7 @@ module.exports = (mongoose) => {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Disciplinas',
       index: true
-    },
+    }
 
   })
 

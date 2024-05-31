@@ -21,23 +21,23 @@ exports.adicionar = async (req, res, next) => {
 
   // Defina a função de validação personalizada para o email
   Validator.register('emailAlunoIFCE',
-                    value => HELPER_VALIDATIONS.validateEmailInstitucionalDeAlunoOuTutor(value),
-                    'O campo :attribute deve ser um email do domínio aluno.ifce.edu.br'
-                  )
+    value => HELPER_VALIDATIONS.validateEmailInstitucionalDeAlunoOuTutor(value),
+    'O campo :attribute deve ser um email do domínio aluno.ifce.edu.br'
+  )
 
   const regras = {
-      nome: 'required|string|max:100',
-      email: 'required|email|emailAlunoIFCE',
-      matricula: 'required|string|max:14',
-      senha: 'required|string|min:8|max:10',
+    nome: 'required|string|max:100',
+    email: 'required|email|max:100|emailAlunoIFCE',
+    matricula: 'required|string|max:14',
+    senha: 'required|string|min:8|max:10'
   }
 
   // Validações
   const validacao = new Validator(body, regras, VALIDATION_LANGUAGE)
 
   if (!validacao.fails()) {
-      next()
-      return
+    next()
+    return
   }
 
   // Lidar com erro
@@ -50,24 +50,24 @@ exports.alterarDados = async (req, res, next) => {
 
   // Defina a função de validação personalizada para o email
   Validator.register('emailAlunoIFCE',
-                    value => HELPER_VALIDATIONS.validateEmailInstitucionalDeAlunoOuTutor(value),
-                    'O campo :attribute deve ser um email do domínio aluno.ifce.edu.br'
-                  )
+    value => HELPER_VALIDATIONS.validateEmailInstitucionalDeAlunoOuTutor(value),
+    'O campo :attribute deve ser um email do domínio aluno.ifce.edu.br'
+  )
 
   const regras = {
-      nome: 'string|max:100',
-      email: 'email|emailAlunoIFCE',
-      matricula: 'string|max:14',
-      senha: 'string|min:8|max:10',
-      idDisciplina: 'string'
+    nome: 'string|max:100',
+    email: 'email|emailAlunoIFCE',
+    matricula: 'string|max:14',
+    senha: 'string|min:8|max:10',
+    idDisciplina: 'string'
   }
 
   // Validações
   const validacao = new Validator(body, regras, VALIDATION_LANGUAGE)
 
   if (!validacao.fails()) {
-      next()
-      return
+    next()
+    return
   }
 
   // Lidar com erro
