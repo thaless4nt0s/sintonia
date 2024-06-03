@@ -1,502 +1,264 @@
-/* globals describe, test, expect, jest */
+/* globals describe, test, expect, jest, beforeAll */
 
 /* --- REQUIRES --- */
 
 const randomstring = require('randomstring')
+const validator = require('validator')
 
 /* ---- HELPERS ---- */
 
 const HELPER_REGISTRAR = require('../../../helpers/registrar')
 const HELPER_ALUNOS = require('../../../helpers/alunos')
+const HELPER_LOGIN = require('../../../helpers/autenticar')
 const HELPER_TUTORES = require('../../../helpers/tutores')
 const HELPER_ADMINS = require('../../../helpers/admins')
+const HELPER_TOKEN = require('../../../../helpers/tokens')
+
+/* --- REPOSITORIES --- */
+
+const REPOSITORY_ALUNOS = require('../../../../repositories/alunos')
+const REPOSITORY_TUTORES = require('../../../../repositories/tutores')
+const REPOSITORY_ADMINS = require('../../../../repositories/admins')
+
+/* --- CONSTANTS --- */
+
+const DADOS_ALUNO = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
+const DADOS_TUTOR = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
+const DADOS_ADMIN = HELPER_ADMINS.gerarDadosValidosParaCriarAdmin()
 
 /* ---- METHODS ---- */
 
-describe('Testes de integração da rota POST /registrar/', () => {
+describe('Testes de integração da rota POST /autenticacao', () => {
   jest.setTimeout(10000)
-  describe('Testes da rota POST /registrar/{aluno ou administrador ou tutor}', () => {
-    describe('Criar uma conta', () => {
-      test('Deve registrar o aluno com todos os dados preenchidos corretamente', async () => {
-        const dados = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-        const response = await HELPER_REGISTRAR.registrarAluno(dados)
 
-        expect(response.body).toMatch(/aluno.*sucesso/i)
-        expect(response.status).toBe('ok')
-        expect(response.statusCode).toBe(200)
+  const testeObjetoRespostaEntrar = (response, usuario) => {
+    expect(response).toHaveProperty('body')
+
+    expect(typeof response.body).toBe('string')
+
+    expect(response.body).not.toBe('')
+  }
+
+  const testeObjetoTokenDadosComum = (dados, DADOS_USUARIO, tipo) => {
+    expect(dados.usuario).toHaveProperty('_id')
+    expect(dados.usuario).toHaveProperty('nome')
+    expect(dados.usuario).toHaveProperty('email')
+    expect(dados.usuario).toHaveProperty('dataRegistro')
+    expect(dados).toHaveProperty('tipo')
+
+    expect(typeof dados.usuario._id).toBe('string')
+    expect(typeof dados.usuario.nome).toBe('string')
+    expect(typeof dados.usuario.email).toBe('string')
+    expect(typeof dados.usuario.dataRegistro).toBe('string')
+    expect(typeof dados.tipo).toBe('string')
+
+    expect(validator.isEmail(dados.usuario.email)).toBe(true)
+    expect(dados.tipo).toMatch(tipo)
+  }
+
+  let alunoFake = {}
+  let tutorFake = {}
+  let adminFake = {}
+  beforeAll(async () => {
+    await HELPER_REGISTRAR.registrarAluno(DADOS_ALUNO)
+    await HELPER_REGISTRAR.registrarTutor(DADOS_TUTOR)
+    await HELPER_REGISTRAR.registrarAdministrador(DADOS_ADMIN)
+    alunoFake = await REPOSITORY_ALUNOS.buscarUm({ email: DADOS_ALUNO.email })
+    tutorFake = await REPOSITORY_TUTORES.buscarUm({ email: DADOS_TUTOR.email })
+    adminFake = await REPOSITORY_ADMINS.buscarUm({ email: DADOS_ADMIN.email })
+  })
+
+  describe('Realizando login na conta de um aluno', () => {
+    describe('Testes de validação', () => {
+      test('Deve retornar 406 exigindo que o "email" seja obrigatório', async () => {
+        const response = await HELPER_LOGIN.login({})
+        expect(response.statusCode).toBe(406)
+        expect(response.status).toBe('error')
+        expect(response.body).toMatch(/email.*obrigatório/i)
       })
 
-      test('Deve registrar o tutor com todos os dados preenchidos corretamente', async () => {
-        const dados = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-        const response = await HELPER_REGISTRAR.registrarTutor(dados)
-
-        expect(response.body).toMatch(/tutor.*sucesso/i)
-        expect(response.status).toBe('ok')
-        expect(response.statusCode).toBe(200)
+      test('Deve retornar 406 exigindo que o campo "email" seja do domínio @aluno.ifce.edu.br ou @ifce.edu.br', async () => {
+        const response = await HELPER_LOGIN.login({ email: 'email@email.com' })
+        expect(response.statusCode).toBe(406)
+        expect(response.status).toBe('error')
+        expect(response.body).toMatch(/email.*ifce/i)
       })
 
-      test('Deve registrar o administrador com todos os dados preenchidos corretamente', async () => {
-        const dados = HELPER_ADMINS.gerarDadosValidosParaCriarAdmin()
-        const response = await HELPER_REGISTRAR.registrarAdministrador(dados)
+      test('Deve retornar 406 exigindo que o campo "email" seja válido', async () => {
+        const response = await HELPER_LOGIN.login({ email: 123456 })
+        expect(response.statusCode).toBe(406)
+        expect(response.status).toBe('error')
+        expect(response.body).toMatch(/email.*válido/i)
+      })
 
-        expect(response.body).toMatch(/administrador.*sucesso/i)
-        expect(response.status).toBe('ok')
-        expect(response.statusCode).toBe(200)
+      test('Deve retornar 406 exigindo que o campo "email" respeite o limite máximo de caracteres', async () => {
+        const response = await HELPER_LOGIN.login({ email: `${randomstring.generate(101)}@aluno.ifce.edu.br` })
+        expect(response.statusCode).toBe(406)
+        expect(response.status).toBe('error')
+        expect(response.body).toMatch(/email.*100/i)
+      })
+
+      test('Deve retornar 406 exigindo que o compo "senha" seja obrigatória', async () => {
+        const response = await HELPER_LOGIN.login({ email: DADOS_ALUNO.email })
+        expect(response.statusCode).toBe(406)
+        expect(response.status).toBe('error')
+        expect(response.body).toMatch(/senha.*obrigatório/i)
+      })
+
+      test('Deve retornar 406 exigindo que o campo "email" respeite o limite mínimo de caracteres', async () => {
+        const response = await HELPER_LOGIN.login({ email: DADOS_ALUNO.email, senha: randomstring.generate(1) })
+        expect(response.statusCode).toBe(406)
+        expect(response.status).toBe('error')
+        expect(response.body).toMatch(/senha.*8/i)
+      })
+
+      test('Deve retornar 406 exigindo que o compo "senha" seja uma string', async () => {
+        const response = await HELPER_LOGIN.login({ email: DADOS_ALUNO.email, senha: 123123213 })
+        expect(response.statusCode).toBe(406)
+        expect(response.status).toBe('error')
+        expect(response.body).toMatch(/senha.*string/i)
       })
     })
 
-    describe('Validações da requisição para alunos', () => {
-      test('Deve retornar 406 exigindo que o campo "nome" seja uma string', async () => {
-        const dados = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-        dados.nome = 123456
-        const response = await HELPER_REGISTRAR.registrarAluno(dados)
+    describe('Acessando a conta de um aluno com sucesso', () => {
+      test('Deve retornar 200 para o login de um aluno', async () => {
+        const response = await HELPER_LOGIN.login(DADOS_ALUNO)
 
-        expect(response.body).toMatch(/nome.*string/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
+        expect(response.status).toBe('ok')
+        expect(response.statusCode).toBe(200)
+        testeObjetoRespostaEntrar(response, DADOS_ALUNO)
       })
 
-      test('Deve retornar 406 exigindo que o campo "nome" seja obrigatório', async () => {
-        const dados = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-        delete dados.nome
-        const response = await HELPER_REGISTRAR.registrarAluno(dados)
+      test('Deve conter os dados corretos no token de autenticação ao logar como aluno', async () => {
+        const response = await HELPER_LOGIN.login(DADOS_ALUNO)
+        const token = response.body
+        const { usuario } = await HELPER_TOKEN.obterDadosDoToken(token, process.env.SECRET)
+        testeObjetoTokenDadosComum(usuario, DADOS_ALUNO, 'aluno')
 
-        expect(response.body).toMatch(/nome.*obrigatório/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
+        expect(usuario.usuario).toHaveProperty('matricula')
+        expect(typeof usuario.usuario.matricula).toBe('string')
 
-      test('Deve retornar 406 exigindo que o campo "nome" respeite o limite de caracteres', async () => {
-        const dados = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-        dados.nome = randomstring.generate(101)
-        const response = await HELPER_REGISTRAR.registrarAluno(dados)
-
-        expect(response.body).toMatch(/nome.*100/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "email" tenha um endereço válido', async () => {
-        const dados = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-        dados.email = 123456
-        const response = await HELPER_REGISTRAR.registrarAluno(dados)
-        expect(response.body).toMatch(/email.*válido/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "email" seja obrigatório', async () => {
-        const dados = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-        delete dados.email
-        const response = await HELPER_REGISTRAR.registrarAluno(dados)
-
-        expect(response.body).toMatch(/email.*obrigatório/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "email" respeite o limite de caracteres', async () => {
-        const dados = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-        dados.email = `${randomstring.generate(201)}@aluno.ifce.edu.br`
-        const response = await HELPER_REGISTRAR.registrarAluno(dados)
-
-        expect(response.body).toMatch(/email.*100/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "email" tenha o dominio @aluno.ifce.edu.br', async () => {
-        const dados = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-        dados.email = `${randomstring.generate(20)}@email.com`
-        const response = await HELPER_REGISTRAR.registrarAluno(dados)
-        expect(response.body).toMatch(/email.*domínio/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "email" já utiliza a email de alguém', async () => {
-        const dados = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-        const dados2 = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-
-        dados2.email = dados.email
-        await HELPER_REGISTRAR.registrarAluno(dados)
-        const response2 = await HELPER_REGISTRAR.registrarAluno(dados2)
-
-        expect(response2.body).toMatch(/email.*existente/i)
-        expect(response2.status).toBe('error')
-        expect(response2.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "matricula" seja obrigatório', async () => {
-        const dados = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-        delete dados.matricula
-        const response = await HELPER_REGISTRAR.registrarAluno(dados)
-
-        expect(response.body).toMatch(/matricula.*obrigatório/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "matricula" seja uma string', async () => {
-        const dados = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-        dados.matricula = 21334
-        const response = await HELPER_REGISTRAR.registrarAluno(dados)
-
-        expect(response.body).toMatch(/matricula.*string/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "matricula" respeite o limite de caracteres', async () => {
-        const dados = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-        dados.matricula = randomstring.generate(29)
-        const response = await HELPER_REGISTRAR.registrarAluno(dados)
-
-        expect(response.body).toMatch(/matricula.*14/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "matricula" já utiliza a matricula de alguém', async () => {
-        const dados = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-        const dados2 = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-
-        dados2.matricula = dados.matricula
-        await HELPER_REGISTRAR.registrarAluno(dados)
-        const response2 = await HELPER_REGISTRAR.registrarAluno(dados2)
-
-        expect(response2.body).toMatch(/matricula.*existente/i)
-        expect(response2.status).toBe('error')
-        expect(response2.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "senha" respeite o limite de caracteres', async () => {
-        const dados = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-        dados.senha = randomstring.generate(29)
-        const response = await HELPER_REGISTRAR.registrarAluno(dados)
-
-        expect(response.body).toMatch(/senha.*10/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "senha" respeite o limite mínimo de caracteres', async () => {
-        const dados = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-        dados.senha = randomstring.generate(3)
-        const response = await HELPER_REGISTRAR.registrarAluno(dados)
-
-        expect(response.body).toMatch(/senha.*8/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "senha" seja obrigatório', async () => {
-        const dados = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-        delete dados.senha
-        const response = await HELPER_REGISTRAR.registrarAluno(dados)
-
-        expect(response.body).toMatch(/senha.*obrigatório/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "senha" seja uma string', async () => {
-        const dados = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
-        dados.senha = 1234566
-        const response = await HELPER_REGISTRAR.registrarAluno(dados)
-
-        expect(response.body).toMatch(/senha.*string/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
+        expect(usuario.usuario).toHaveProperty('emTutoria')
+        expect(typeof usuario.usuario.emTutoria).toBe('boolean')
       })
     })
 
-    describe('Validações da requisição para tutores', () => {
-      test('Deve retornar 406 exigindo que o campo "nome" seja uma string', async () => {
-        const dados = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-        dados.nome = 123456
-        const response = await HELPER_REGISTRAR.registrarTutor(dados)
+    describe('Testes de segurança', () => {
+      test('Tentando realizar login com a senha incorreta', async () => {
+        const request = await HELPER_LOGIN.login({ email: DADOS_ALUNO.email, senha: 'asdasdasd' })
+        expect(request.statusCode).toBe(406)
+        expect(request.status).toBe('error')
+        expect(request.body).toMatch(/Email ou senha incorretos/i)
+      })
+    })
+  })
 
-        expect(response.body).toMatch(/nome.*string/i)
-        expect(response.status).toBe('error')
+  /* ------ */
+
+  describe('Realizando login na conta de um tutor', () => {
+    describe('Testes de validação', () => {
+      test('Deve retornar 406 exigindo que o compo "senha" seja obrigatória', async () => {
+        const response = await HELPER_LOGIN.login({ email: DADOS_TUTOR.email })
         expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "nome" seja obrigatório', async () => {
-        const dados = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-        delete dados.nome
-        const response = await HELPER_REGISTRAR.registrarTutor(dados)
-
-        expect(response.body).toMatch(/nome.*obrigatório/i)
         expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "nome" respeite o limite de caracteres', async () => {
-        const dados = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-        dados.nome = randomstring.generate(101)
-        const response = await HELPER_REGISTRAR.registrarTutor(dados)
-
-        expect(response.body).toMatch(/nome.*100/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "email" tenha um endereço válido', async () => {
-        const dados = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-        dados.email = 12
-        const response = await HELPER_REGISTRAR.registrarTutor(dados)
-        expect(response.body).toMatch(/email.*válido/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "email" seja obrigatório', async () => {
-        const dados = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-        delete dados.email
-        const response = await HELPER_REGISTRAR.registrarTutor(dados)
-
-        expect(response.body).toMatch(/email.*obrigatório/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "email" respeite o limite de caracteres', async () => {
-        const dados = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-        dados.email = `${randomstring.generate(201)}@aluno.ifce.edu.br`
-        const response = await HELPER_REGISTRAR.registrarTutor(dados)
-
-        expect(response.body).toMatch(/email.*100/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "email" tenha o dominio @aluno.ifce.edu.br', async () => {
-        const dados = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-        dados.email = `${randomstring.generate(20)}@email.com`
-        const response = await HELPER_REGISTRAR.registrarTutor(dados)
-        expect(response.body).toMatch(/email.*domínio/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "email" já utiliza a email de alguém', async () => {
-        const dados = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-        const dados2 = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-
-        dados2.email = dados.email
-        await HELPER_REGISTRAR.registrarTutor(dados)
-        const response2 = await HELPER_REGISTRAR.registrarTutor(dados2)
-
-        expect(response2.body).toMatch(/email.*existente/i)
-        expect(response2.status).toBe('error')
-        expect(response2.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "matricula" seja obrigatório', async () => {
-        const dados = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-        delete dados.matricula
-        const response = await HELPER_REGISTRAR.registrarTutor(dados)
-
-        expect(response.body).toMatch(/matricula.*obrigatório/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "matricula" seja uma string', async () => {
-        const dados = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-        dados.matricula = 21334
-        const response = await HELPER_REGISTRAR.registrarTutor(dados)
-
-        expect(response.body).toMatch(/matricula.*string/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "matricula" respeite o limite de caracteres', async () => {
-        const dados = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-        dados.matricula = randomstring.generate(29)
-        const response = await HELPER_REGISTRAR.registrarTutor(dados)
-
-        expect(response.body).toMatch(/matricula.*14/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "matricula" já utiliza a matricula de alguém', async () => {
-        const dados = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-        const dados2 = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-
-        dados2.matricula = dados.matricula
-        await HELPER_REGISTRAR.registrarTutor(dados)
-        const response2 = await HELPER_REGISTRAR.registrarTutor(dados2)
-
-        expect(response2.body).toMatch(/matricula.*existente/i)
-        expect(response2.status).toBe('error')
-        expect(response2.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "senha" respeite o limite de caracteres', async () => {
-        const dados = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-        dados.senha = randomstring.generate(29)
-        const response = await HELPER_REGISTRAR.registrarTutor(dados)
-
-        expect(response.body).toMatch(/senha.*10/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "senha" respeite o limite mínimo de caracteres', async () => {
-        const dados = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-        dados.senha = randomstring.generate(3)
-        const response = await HELPER_REGISTRAR.registrarTutor(dados)
-
-        expect(response.body).toMatch(/senha.*8/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "senha" seja obrigatório', async () => {
-        const dados = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-        delete dados.senha
-        const response = await HELPER_REGISTRAR.registrarTutor(dados)
-
         expect(response.body).toMatch(/senha.*obrigatório/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
       })
 
-      test('Deve retornar 406 exigindo que o campo "senha" seja uma string', async () => {
-        const dados = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
-        dados.senha = 1234566
-        const response = await HELPER_REGISTRAR.registrarTutor(dados)
-
-        expect(response.body).toMatch(/senha.*string/i)
-        expect(response.status).toBe('error')
+      test('Deve retornar 406 exigindo que o campo "email" respeite o limite mínimo de caracteres', async () => {
+        const response = await HELPER_LOGIN.login({ email: DADOS_TUTOR.email, senha: randomstring.generate(1) })
         expect(response.statusCode).toBe(406)
+        expect(response.status).toBe('error')
+        expect(response.body).toMatch(/senha.*8/i)
+      })
+
+      test('Deve retornar 406 exigindo que o compo "senha" seja uma string', async () => {
+        const response = await HELPER_LOGIN.login({ email: DADOS_TUTOR.email, senha: 123123213 })
+        expect(response.statusCode).toBe(406)
+        expect(response.status).toBe('error')
+        expect(response.body).toMatch(/senha.*string/i)
       })
     })
 
-    describe('Validações da requisição para administradores', () => {
-      test('Deve retornar 406 exigindo que o campo "nome" seja uma string', async () => {
-        const dados = HELPER_ADMINS.gerarDadosValidosParaCriarAdmin()
-        dados.nome = 123456
-        const response = await HELPER_REGISTRAR.registrarAdministrador(dados)
+    describe('Acessando a conta de um tutor com sucesso', () => {
+      test('Deve retornar 200 para o login de um tutor', async () => {
+        const response = await HELPER_LOGIN.login(DADOS_TUTOR)
+        expect(response.status).toBe('ok')
+        expect(response.statusCode).toBe(200)
+        testeObjetoRespostaEntrar(response, DADOS_TUTOR)
+      })
 
-        expect(response.body).toMatch(/nome.*string/i)
-        expect(response.status).toBe('error')
+      test('Deve conter os dados corretos no token de autenticação ao logar como tutor', async () => {
+        const response = await HELPER_LOGIN.login(DADOS_TUTOR)
+        const token = response.body
+        const { usuario } = await HELPER_TOKEN.obterDadosDoToken(token, process.env.SECRET)
+        testeObjetoTokenDadosComum(usuario, DADOS_TUTOR, 'tutor')
+
+        expect(usuario.usuario).toHaveProperty('matricula')
+        expect(typeof usuario.usuario.matricula).toBe('string')
+
+        expect(usuario.usuario).toHaveProperty('emTutoria')
+        expect(typeof usuario.usuario.emTutoria).toBe('boolean')
+      })
+    })
+
+    describe('Testes de segurança', () => {
+      test('Tentando realizar login com a senha incorreta', async () => {
+        const request = await HELPER_LOGIN.login({ email: DADOS_TUTOR.email, senha: 'asdasdasd' })
+        expect(request.statusCode).toBe(406)
+        expect(request.status).toBe('error')
+        expect(request.body).toMatch(/Email ou senha incorretos/i)
+      })
+    })
+  })
+
+  /* ----- */
+
+  describe('Realizando login na conta de um administrador', () => {
+    describe('Testes de validação', () => {
+      test('Deve retornar 406 exigindo que o compo "senha" seja obrigatória', async () => {
+        const response = await HELPER_LOGIN.login({ email: DADOS_ADMIN.email })
         expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "nome" seja obrigatório', async () => {
-        const dados = HELPER_ADMINS.gerarDadosValidosParaCriarAdmin()
-        delete dados.nome
-        const response = await HELPER_REGISTRAR.registrarAdministrador(dados)
-
-        expect(response.body).toMatch(/nome.*obrigatório/i)
         expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "nome" respeite o limite de caracteres', async () => {
-        const dados = HELPER_ADMINS.gerarDadosValidosParaCriarAdmin()
-        dados.nome = randomstring.generate(101)
-        const response = await HELPER_REGISTRAR.registrarAdministrador(dados)
-
-        expect(response.body).toMatch(/nome.*100/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "email" tenha um endereço válido', async () => {
-        const dados = HELPER_ADMINS.gerarDadosValidosParaCriarAdmin()
-        dados.email = 12
-        const response = await HELPER_REGISTRAR.registrarAdministrador(dados)
-        expect(response.body).toMatch(/email.*válido/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "email" seja obrigatório', async () => {
-        const dados = HELPER_ADMINS.gerarDadosValidosParaCriarAdmin()
-        delete dados.email
-        const response = await HELPER_REGISTRAR.registrarAdministrador(dados)
-
-        expect(response.body).toMatch(/email.*obrigatório/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "email" respeite o limite de caracteres', async () => {
-        const dados = HELPER_ADMINS.gerarDadosValidosParaCriarAdmin()
-        dados.email = `${randomstring.generate(201)}@ifce.edu.br`
-        const response = await HELPER_REGISTRAR.registrarAdministrador(dados)
-
-        expect(response.body).toMatch(/email.*100/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "email" tenha o dominio @ifce.edu.br', async () => {
-        const dados = HELPER_ADMINS.gerarDadosValidosParaCriarAdmin()
-        dados.email = `${randomstring.generate(20)}@email.com`
-        const response = await HELPER_REGISTRAR.registrarAdministrador(dados)
-        expect(response.body).toMatch(/email.*domínio/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "email" já utiliza a email de alguém', async () => {
-        const dados = HELPER_ADMINS.gerarDadosValidosParaCriarAdmin()
-        const dados2 = HELPER_ADMINS.gerarDadosValidosParaCriarAdmin()
-
-        dados2.email = dados.email
-        await HELPER_REGISTRAR.registrarAdministrador(dados)
-        const response2 = await HELPER_REGISTRAR.registrarAdministrador(dados2)
-
-        expect(response2.body).toMatch(/email.*existente/i)
-        expect(response2.status).toBe('error')
-        expect(response2.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "senha" respeite o limite de caracteres', async () => {
-        const dados = HELPER_ADMINS.gerarDadosValidosParaCriarAdmin()
-        dados.senha = randomstring.generate(29)
-        const response = await HELPER_REGISTRAR.registrarAdministrador(dados)
-
-        expect(response.body).toMatch(/senha.*10/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "senha" respeite o limite mínimo de caracteres', async () => {
-        const dados = HELPER_ADMINS.gerarDadosValidosParaCriarAdmin()
-        dados.senha = randomstring.generate(3)
-        const response = await HELPER_REGISTRAR.registrarAdministrador(dados)
-
-        expect(response.body).toMatch(/senha.*8/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
-      })
-
-      test('Deve retornar 406 exigindo que o campo "senha" seja obrigatório', async () => {
-        const dados = HELPER_ADMINS.gerarDadosValidosParaCriarAdmin()
-        delete dados.senha
-        const response = await HELPER_REGISTRAR.registrarAdministrador(dados)
-
         expect(response.body).toMatch(/senha.*obrigatório/i)
-        expect(response.status).toBe('error')
-        expect(response.statusCode).toBe(406)
       })
 
-      test('Deve retornar 406 exigindo que o campo "senha" seja uma string', async () => {
-        const dados = HELPER_ADMINS.gerarDadosValidosParaCriarAdmin()
-        dados.senha = 1234566
-        const response = await HELPER_REGISTRAR.registrarAdministrador(dados)
-
-        expect(response.body).toMatch(/senha.*string/i)
-        expect(response.status).toBe('error')
+      test('Deve retornar 406 exigindo que o campo "email" respeite o limite mínimo de caracteres', async () => {
+        const response = await HELPER_LOGIN.login({ email: DADOS_ADMIN.email, senha: randomstring.generate(1) })
         expect(response.statusCode).toBe(406)
+        expect(response.status).toBe('error')
+        expect(response.body).toMatch(/senha.*8/i)
+      })
+
+      test('Deve retornar 406 exigindo que o compo "senha" seja uma string', async () => {
+        const response = await HELPER_LOGIN.login({ email: DADOS_ADMIN.email, senha: 123123213 })
+        expect(response.statusCode).toBe(406)
+        expect(response.status).toBe('error')
+        expect(response.body).toMatch(/senha.*string/i)
+      })
+    })
+
+    describe('Acessando a conta de um administrador com sucesso', () => {
+      test('Deve retornar 200 para o login de um administrador', async () => {
+        const response = await HELPER_LOGIN.login(DADOS_ADMIN)
+        expect(response.status).toBe('ok')
+        expect(response.statusCode).toBe(200)
+        testeObjetoRespostaEntrar(response, DADOS_ADMIN)
+      })
+
+      test('Deve conter os dados corretos no token de autenticação ao logar como administrador', async () => {
+        const response = await HELPER_LOGIN.login(DADOS_ADMIN)
+        const token = response.body
+        const { usuario } = await HELPER_TOKEN.obterDadosDoToken(token, process.env.SECRET)
+        testeObjetoTokenDadosComum(usuario, DADOS_ADMIN, 'admin')
+      })
+    })
+
+    describe('Testes de segurança', () => {
+      test('Tentando realizar login com a senha incorreta', async () => {
+        const request = await HELPER_LOGIN.login({ email: DADOS_ADMIN.email, senha: 'asdasdasd' })
+        expect(request.statusCode).toBe(406)
+        expect(request.status).toBe('error')
+        expect(request.body).toMatch(/Email ou senha incorretos/i)
       })
     })
   })
