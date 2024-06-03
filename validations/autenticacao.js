@@ -21,23 +21,23 @@ exports.autenticar = async (req, res, next) => {
 
   // Defina a função de validação personalizada para o email
   Validator.register('emailServidorIFCE',
-                    value =>
-                      HELPER_VALIDATIONS.validateEmailInstitucionalServidor(value) ||
+    value =>
+      HELPER_VALIDATIONS.validateEmailInstitucionalServidor(value) ||
                       HELPER_VALIDATIONS.validateEmailInstitucionalDeAlunoOuTutor(value),
-                    'O campo :attribute deve ser um email do domínio @ifce.edu.br ou @aluno.ifce.edu.br'
-                  )
+    'O campo :attribute deve ser um email do domínio @ifce.edu.br ou @aluno.ifce.edu.br'
+  )
 
   const regras = {
-      email: 'required|email|emailServidorIFCE',
-      senha: 'required|string|min:8|max:10',
+    email: 'required|email|max:100|emailServidorIFCE',
+    senha: 'required|string|min:8|max:10'
   }
 
   // Validações
   const validacao = new Validator(body, regras, VALIDATION_LANGUAGE)
 
   if (!validacao.fails()) {
-      next()
-      return
+    next()
+    return
   }
 
   // Lidar com erro
