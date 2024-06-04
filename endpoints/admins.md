@@ -45,7 +45,7 @@
 | ------------ | ------ | ------------- | ------------------------------ | ------------------------------ |
 | nome         | string | Sim           | Neymar jr                      |                                |
 | email        | string | Sim           | neymar.jr.00@aluno.ifce.edu.br | somente @ifce.edu.br           |
-| senha        | string | Sim           | 12345678                       | De 8 até - caracteres          |
+| senha        | string | Sim           | 12345678                       | De 8 até 10 caracteres         |
 
 **Response**:
 

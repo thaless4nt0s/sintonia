@@ -12,7 +12,7 @@
 | nome         | string | Sim           | Neymar jr                      |                                |
 | email        | string | Sim           | neymar.jr.00@aluno.ifce.edu.br | somente @aluno.ifce.edu.br     |
 | matricula    | string | Sim           | 20241045050000                 |                                |
-| senha        | string | Sim           | 12345678                       | De 8 até - caracteres          |
+| senha        | string | Sim           | 12345678                       | De 8 até 10 caracteres         |
 
 **Response**:
 
@@ -41,7 +41,7 @@
 | nome         | string | Sim           | Neymar jr                      |                                |
 | email        | string | Sim           | neymar.jr.00@aluno.ifce.edu.br | somente @aluno.ifce.edu.br     |
 | matricula    | string | Sim           | 20241045050000                 |                                |
-| senha        | string | Sim           | 12345678                       | De 8 até - caracteres          |
+| senha        | string | Sim           | 12345678                       | De 8 até 10 caracteres         |
 | semestre     | Number | Sim           | 2                              | Do 1° até - semestre           |
 
 **Response**:
@@ -70,7 +70,7 @@
 | ------------ | ------ | ------------- | ------------------------------ | ------------------------------ |
 | nome         | string | Sim           | Neymar jr                      |                                |
 | email        | string | Sim           | neymar.jr.00@aluno.ifce.edu.br | somente @ifce.edu.br           |
-| senha        | string | Sim           | 12345678                       | De 8 até - caracteres          |
+| senha        | string | Sim           | 12345678                       | De 8 até 10 caracteres         |
 
 **Response**:
 
