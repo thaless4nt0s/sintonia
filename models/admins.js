@@ -36,8 +36,7 @@ module.exports = (mongoose) => {
       type: String,
       required: [true, 'O campo Senha é obrigatório'],
       trim: true,
-      minlength: [8, 'O campo Senha deve ter no mínimo 8 caracteres'],
-      maxlength: [8, 'O campo Senha deve ter no máximo 10 caracteres']
+      minlength: [8, 'O campo Senha deve ter no mínimo 8 caracteres']
     },
 
     dataRegistro: {
