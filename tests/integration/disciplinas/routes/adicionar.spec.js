@@ -63,7 +63,7 @@ describe('Testes da rota POST /disciplinas', () => {
 
       expect(response.statusCode).toBe(200)
       expect(response.status).toBe('ok')
-      expect(response).toMatch(/disciplina.*adicionada/i)
+      expect(response.body).toMatch(/disciplina.*adicionada/i)
     })
   })
 
