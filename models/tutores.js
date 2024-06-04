@@ -36,6 +36,7 @@ module.exports = (mongoose) => {
       type: String,
       trim: true,
       required: [true, 'O campo Matricula é obrigatório'],
+      maxlength: 14,
       unique: true
     },
 
@@ -43,7 +44,8 @@ module.exports = (mongoose) => {
       type: String,
       required: [true, 'O campo Senha é obrigatório'],
       trim: true,
-      minlength: [8, 'O campo Senha deve ter no mínimo 8 caracteres']
+      minlength: [8, 'O campo Senha deve ter no mínimo 8 caracteres'],
+      maxlength: [8, 'O campo Senha deve ter no máximo 10 caracteres']
     },
 
     semestre: {
