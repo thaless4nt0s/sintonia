@@ -25,8 +25,13 @@ exports.alterarDados = async (idDisciplina, dados, token) => {
 }
 
 exports.remover = async (idDisciplina, token) => {
-  console.log(idDisciplina)
   const { body } = await request.delete(`/disciplinas/${idDisciplina}`).set('x-access-token', token)
+
+  return body
+}
+
+exports.receberPorId = async (idDisciplina, token) => {
+  const { body } = await request.get(`/disciplinas/${idDisciplina}`).set('x-access-token', token)
 
   return body
 }
