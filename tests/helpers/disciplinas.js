@@ -35,3 +35,9 @@ exports.receberPorId = async (idDisciplina, token) => {
 
   return body
 }
+
+exports.receberTodos = async (token) => {
+  const { body } = await request.get('/disciplinas').set('x-access-token', token)
+
+  return body
+}
