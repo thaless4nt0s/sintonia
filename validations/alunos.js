@@ -56,7 +56,7 @@ exports.alterarDados = async (req, res, next) => {
 
   const regras = {
     nome: 'string|max:100',
-    email: 'email|emailAlunoIFCE',
+    email: 'email|max:100|emailAlunoIFCE',
     matricula: 'string|max:14',
     senha: 'string|min:8|max:10',
     idDisciplina: 'string'
