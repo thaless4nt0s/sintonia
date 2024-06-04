@@ -1,7 +1,3 @@
-/* --- REQUIRES --- */
-
-const mongoose = require('mongoose')
-
 /* --- HELPERS --- */
 
 const HELPER_RESPONSE = require('../helpers/response')
@@ -32,6 +28,10 @@ exports.verificarExistenciaPorParametro = async (req, res, next) => {
   const { idDisciplina } = req.body
 
   try {
+    if (!idDisciplina) {
+      next()
+      return
+    }
     const disciplina = await REPOSITORY_DISCIPLINAS.buscarUm({ _id: idDisciplina })
 
     if (!disciplina) {
@@ -48,7 +48,7 @@ exports.verificarExistenciaEmArrayPorParametro = async (req, res, next) => {
   const { idDisciplina } = req.body
 
   try {
-      if (idDisciplina){
+    if (idDisciplina) {
       const promises = idDisciplina.map(async (element) => {
         const disciplina = await REPOSITORY_DISCIPLINAS.buscarUm({ _id: element })
         if (!disciplina) {
