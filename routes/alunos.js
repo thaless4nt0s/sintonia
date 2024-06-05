@@ -42,6 +42,7 @@ router.delete(
 router.get(
   '/:idAluno',
   MIDDLEWARE_TOKEN.acessoPorTodosOsUsuarios,
+  MIDDLEWARE_ALUNOS.verificarExistenciaPorId,
   CONTROLLER_ALUNOS.receberPorId
 )
 
