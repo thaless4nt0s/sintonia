@@ -1,3 +1,4 @@
+/* globals request */
 /* ---- REQUIRES ---- */
 
 const randomstring = require('randomstring')
@@ -16,4 +17,10 @@ exports.gerarDadosValidosParaCriarTutor = () => {
     semestre: faker.string.numeric({ exclude: ['0'] }),
     senha: '12345678'
   }
+}
+
+exports.alterarDados = async (idTutor, dados, token) => {
+  const { body } = await request.patch(`/tutores/${idTutor}`).send(dados).set('x-access-token', token)
+
+  return body
 }
