@@ -7,15 +7,10 @@ const mongoose = require('mongoose')
 const MODEL_TUTORES = mongoose.model('Tutores')
 const MODEL_TUTORIAS = mongoose.model('Tutorias')
 
-/* --- HELPERS --- */
-
-const HELPER_DATE = require('../helpers/date')
-const disciplinas = require('../models/disciplinas')
-
 /* ---- METHODS ---- */
 
 // Busca de maneira especifica
-exports.buscarUm = async (filtro, select={}) => {
+exports.buscarUm = async (filtro, select = {}) => {
   return MODEL_TUTORES.findOne(filtro).select(select)
 }
 
@@ -108,7 +103,7 @@ exports.mostrarTodos = async (query) => {
     {
       $addFields: {
         emTutoria: {
-          $cond: { if: "$emTutoria", then: "sim", else: "não" }
+          $cond: { if: '$emTutoria', then: 'sim', else: 'não' }
         },
         media: { $round: ['$media', 1] } // Substituir média nula por "N/A"
       }
@@ -129,10 +124,10 @@ exports.mostrarTodos = async (query) => {
   return tutores
 }
 
-//Mostrar historico
+// Mostrar historico
 exports.mostrarHistorico = async (idTutor) => {
   const filtros = {
-    idTutor: new mongoose.Types.ObjectId(idTutor),
+    idTutor: new mongoose.Types.ObjectId(idTutor)
   }
 
   const select = {
@@ -203,7 +198,7 @@ exports.mostrarHistorico = async (idTutor) => {
     {
       $addFields: {
         emTutoria: {
-          $cond: { if: "$emTutoria", then: "Em andamento", else: "Finalizada" }
+          $cond: { if: '$emTutoria', then: 'Em andamento', else: 'Finalizada' }
         },
         dataRegistro: {
           $dateToString: {
@@ -229,22 +224,23 @@ exports.mostrarHistorico = async (idTutor) => {
       $project: select
     },
     {
-      $sort: {dataEncerramento: -1}
+      $sort: { dataEncerramento: -1 }
     }
   ])
 }
 
 // exibe os dados de somente um tutor
 exports.receberPorId = async (idTutor) => {
-
   const filtros = {
-    _id: new mongoose.Types.ObjectId(idTutor),
+    _id: new mongoose.Types.ObjectId(idTutor)
   }
 
   const select = {
-    'nome': 1,
-    'email': 1,
-    'semestre': 1,
+    nome: 1,
+    email: 1,
+    semestre: 1,
+    matricula: 1,
+    emTutoria: 1,
     'disciplinas.nome': 1,
     'avaliacoes.comentario': 1,
     'avaliacoes.dataRegistro': 1,
@@ -274,12 +270,15 @@ exports.receberPorId = async (idTutor) => {
     },
     {
       $addFields: {
-        media: { $round: [{ $avg: "$avaliacoes.nota" }, 1] },
+        media: { $round: [{ $avg: '$avaliacoes.nota' }, 1] },
         'avaliacoes.dataRegistro': {
           $dateToString: {
             date: '$dataRegistro',
             format: '%d/%m/%Y'
           }
+        },
+        emTutoria: {
+          $cond: { if: '$emTutoria', then: 'sim', else: 'não' }
         }
       }
     },
@@ -291,8 +290,8 @@ exports.receberPorId = async (idTutor) => {
 
 /* --- AUX FUNCTIONS --- */
 
-function gerarTutor(dados) {
-  const { nome, email, matricula, senha, semestre} = dados
+function gerarTutor (dados) {
+  const { nome, email, matricula, senha, semestre } = dados
   const tutor = {}
 
   if (nome) tutor.nome = nome
@@ -304,7 +303,7 @@ function gerarTutor(dados) {
   return tutor
 }
 
-function gerarTutorAlterado(dados) {
+function gerarTutorAlterado (dados) {
   const tutor = gerarTutor(dados)
   if (dados.idDisciplina) tutor.idDisciplina = dados.idDisciplina
   return tutor
