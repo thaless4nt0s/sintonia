@@ -35,7 +35,7 @@ const DADOS_TUTOR2 = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
 
 /* --- METHODS --- */
 
-describe('Testes de integração da rota PATCH /alunos/:idAluno', () => {
+describe('Testes de integração da rota PATCH /tutores/:idTutor', () => {
   jest.setTimeout(10000)
   let loginAluno = {}
   let tokenAluno = {}
