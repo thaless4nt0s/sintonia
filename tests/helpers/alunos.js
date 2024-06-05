@@ -41,3 +41,9 @@ exports.remover = async (idAluno, token) => {
 
   return body
 }
+
+exports.receberPorId = async (idAluno, token) => {
+  const { body } = await request.get(`/alunos/${idAluno}`).set('x-access-token', token)
+
+  return body
+}
