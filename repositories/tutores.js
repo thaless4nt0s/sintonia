@@ -47,6 +47,8 @@ exports.mostrarTodos = async (query) => {
   const select = {
     nome: 1,
     semestre: 1,
+    email: 1,
+    matricula: 1,
     'disciplinas.nome': 1,
     emTutoria: 1,
     media: 1
@@ -94,6 +96,8 @@ exports.mostrarTodos = async (query) => {
         _id: '$_id',
         nome: { $first: '$nome' },
         semestre: { $first: '$semestre' },
+        email: { $first: '$email' },
+        matricula: { $first: '$matricula' },
         disciplinas: { $first: '$disciplinas' },
         emTutoria: { $first: '$emTutoria' },
         avaliacoes: { $push: '$avaliacoes' },
