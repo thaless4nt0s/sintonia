@@ -24,3 +24,9 @@ exports.alterarDados = async (idTutor, dados, token) => {
 
   return body
 }
+
+exports.remover = async (idTutor, token) => {
+  const { body } = await request.delete(`/tutores/${idTutor}`).set('x-access-token', token)
+
+  return body
+}
