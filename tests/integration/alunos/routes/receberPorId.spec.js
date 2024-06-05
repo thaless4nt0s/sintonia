@@ -93,7 +93,7 @@ describe('Testes da rota GET /alunos/:idAluno', () => {
   })
 
   describe('Testes de validação da requisição', () => {
-    test('Deve retornar 406 informando que o id da disciplina é inexistente', async () => {
+    test('Deve retornar 406 informando que o id do aluno é inexistente', async () => {
       const response = await HELPER_ALUNOS.receberPorId(mongoid(), tokenAluno)
 
       expect(response.statusCode).toBe(406)
@@ -102,7 +102,7 @@ describe('Testes da rota GET /alunos/:idAluno', () => {
     })
   })
 
-  describe('Obtendo os dados de uma disciplina com sucesso', () => {
+  describe('Obtendo os dados de uma aluno com sucesso', () => {
     test('Deve retornar status 200 "ok" com um aluno que possui disciplina', async () => {
       const response = await HELPER_ALUNOS.receberPorId(aluno._id, tokenAluno)
 
