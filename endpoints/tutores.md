@@ -118,7 +118,9 @@
     "_id":"664de15776e2a0d4310f31e9",
     "nome":"Henrique Leitão",
     "email":"henrique.leitao.01@aluno.ifce.edu.br",
-    "semestre":1,
+    "matricula": "20201045050411",
+    "semestre": 1,
+    "emTutoria": "não",
     "disciplinas":[
       {
         "nome":"LIBRAS"
