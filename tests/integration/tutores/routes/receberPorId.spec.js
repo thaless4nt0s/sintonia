@@ -85,7 +85,6 @@ describe('Testes de integração da rota PATCH /tutores/:idTutor', () => {
 
     await HELPER_TUTORES.alterarDados(tutor._id, DADOS_TUTOR_EDITADO, tokenTutor)
     tutor = await REPOSITORY_TUTORES.buscarUm({ nome: DADOS_TUTOR.nome }, { _id: 1, matricula: 1 })
-    console.log(tutor)
   })
 
   const testeObjetoTutor = (response) => {
