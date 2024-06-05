@@ -55,7 +55,7 @@
 {
   "status":"ok",
   "statusCode":200,
-  "body":[
+  "body":
     {
       "_id":"6643b7e345413309bb82ffc5",
       "nome":"Neymar jr",
@@ -95,7 +95,6 @@
       ],
       "emTutoria":"Não está em tutoria no momento"
     }
-  ]
 }
 ```
 
