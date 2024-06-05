@@ -68,6 +68,8 @@
       "_id":"664e2e9b005e042583f69f49",
       "nome":"Mario Sérgio",
       "semestre":3,
+      "email": "mario.sergio.00@aluno.ifce.edu.br",
+      "matricula": "20201045050490",
       "disciplinas":[
         {
           "nome":"LIBRAS"
@@ -85,6 +87,8 @@
     {
       "_id":"664de15776e2a0d4310f31e9",
       "nome":"Henrique Leitão",
+      "email": "henrique.leitao.01@aluno.ifce.edu.br",
+      "matricula": "20201045050411",
       "semestre":1,
       "disciplinas":[
         {
