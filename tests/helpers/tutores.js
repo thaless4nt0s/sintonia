@@ -19,6 +19,19 @@ exports.gerarDadosValidosParaCriarTutor = () => {
   }
 }
 
+exports.gerarDadosValidosParaEditarTutor = (dados, idDisciplina) => {
+  console.log(dados)
+  const tutorEditado = {}
+  if (dados.nome) tutorEditado.nome = dados.nome
+  if (dados.email) tutorEditado.email = dados.email
+  if (dados.senha) tutorEditado.senha = dados.senha
+  if (dados.matricula) tutorEditado.matricula = dados.matricula
+  if (dados.semestre) tutorEditado.semestre = dados.semestre
+  if (idDisciplina) tutorEditado.idDisciplina = idDisciplina
+
+  return tutorEditado
+}
+
 exports.alterarDados = async (idTutor, dados, token) => {
   const { body } = await request.patch(`/tutores/${idTutor}`).send(dados).set('x-access-token', token)
 
@@ -27,6 +40,12 @@ exports.alterarDados = async (idTutor, dados, token) => {
 
 exports.remover = async (idTutor, token) => {
   const { body } = await request.delete(`/tutores/${idTutor}`).set('x-access-token', token)
+
+  return body
+}
+
+exports.receberPorId = async (idTutor, token) => {
+  const { body } = await request.get(`/tutores/${idTutor}`).set('x-access-token', token)
 
   return body
 }
