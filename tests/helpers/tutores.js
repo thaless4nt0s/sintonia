@@ -49,3 +49,9 @@ exports.receberPorId = async (idTutor, token) => {
 
   return body
 }
+
+exports.receberTodos = async (token) => {
+  const { body } = await request.get('/tutores').set('x-access-token', token)
+
+  return body
+}
