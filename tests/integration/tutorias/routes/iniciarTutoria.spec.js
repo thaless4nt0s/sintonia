@@ -141,7 +141,7 @@ describe('Testes de integração da rota POST /tutorias/:idAluno/:idTutor', () =
 
     aluno = await REPOSITORY_ALUNOS.buscarUm({ nome: DADOS_ALUNO.nome }, { _id: 1 })
     aluno2 = await REPOSITORY_ALUNOS.buscarUm({ nome: DADOS_ALUNO2.nome }, { _id: 1 })
-    aluno4 = await REPOSITORY_ALUNOS.buscarUm({ nome: DADOS_ALUNO4.nome }, { senha: 0 })
+    aluno4 = await REPOSITORY_ALUNOS.buscarUm({ nome: DADOS_ALUNO4.nome }, { _id: 1 })
 
     tutor = await REPOSITORY_TUTORES.buscarUm({ nome: DADOS_TUTOR.nome }, { _id: 1 })
     tutor2 = await REPOSITORY_TUTORES.buscarUm({ nome: DADOS_TUTOR2.nome }, { _id: 1 })
@@ -159,7 +159,7 @@ describe('Testes de integração da rota POST /tutorias/:idAluno/:idTutor', () =
 
     tutor = await REPOSITORY_TUTORES.buscarUm({ nome: DADOS_TUTOR.nome }, { _id: 1 })
     tutor2 = await REPOSITORY_TUTORES.buscarUm({ nome: DADOS_TUTOR2.nome }, { _id: 1 })
-    tutor4 = await REPOSITORY_TUTORES.buscarUm({ nome: DADOS_TUTOR4.nome }, { senha: 1 })
+    tutor4 = await REPOSITORY_TUTORES.buscarUm({ nome: DADOS_TUTOR4.nome }, { _id: 1 })
   })
 
   describe('Testes de validação da requisição', () => {
