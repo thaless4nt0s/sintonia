@@ -20,7 +20,6 @@ exports.gerarDadosValidosParaCriarTutor = () => {
 }
 
 exports.gerarDadosValidosParaEditarTutor = (dados, idDisciplina) => {
-  console.log(dados)
   const tutorEditado = {}
   if (dados.nome) tutorEditado.nome = dados.nome
   if (dados.email) tutorEditado.email = dados.email
