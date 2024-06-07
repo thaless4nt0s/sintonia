@@ -18,3 +18,9 @@ exports.adicionarAvaliacao = async (idTutoria, dados, token) => {
 
   return body
 }
+
+exports.removerAvaliacao = async (idAvaliacao, token) => {
+  const { body } = await request.delete(`/avaliacoes/${idAvaliacao}`).set('x-access-token', token)
+
+  return body
+}
