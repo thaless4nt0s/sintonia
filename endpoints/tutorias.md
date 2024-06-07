@@ -46,7 +46,7 @@
 
 ---
 
-**GET** `/tutorias/historico/tutor/:idTutoria`
+**GET** `/tutorias/historico/tutor/:idTutor`
 
 - **Descrição**: Endpoint responsável por mostrar o histórico de tutorias de um tutor.
 - **Autenticação**: Necessário.
