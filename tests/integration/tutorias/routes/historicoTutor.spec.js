@@ -20,6 +20,7 @@ const HELPER_ADMINS = require('../../../helpers/admins')
 const HELPER_TUTORIAS = require('../../../helpers/tutorias')
 const HELPER_LOGIN = require('../../../helpers/autenticar')
 const HELPER_DISCIPLINAS = require('../../../helpers/disciplinas')
+const HELPER_AVALIACOES = require('../../../helpers/avaliacoes')
 
 /* --- CONSTANTS --- */
 
@@ -242,6 +243,40 @@ describe('Testes de integração da rota GET /tutorias/historico/tutor/:idTutor'
       expect(response.statusCode).toBe(200)
       expect(response.status).toBe('ok')
       objetoTesteTutoria(response.body[0])
+    })
+
+    test('Deve retornar status 200 "ok" para um histórico que contem avaliação', async () => {
+      const DADOS_TUTORIA = HELPER_TUTORIAS.gerarDadosValidosParaCriarTutoria()
+      const DADOS_TUTORIA_ENCERRADA = HELPER_TUTORIAS.gerarDadosValidosParaEncerrarTutoria()
+
+      const DADOS_ALUNO = HELPER_ALUNOS.gerarDadosValidosParaCriarAluno()
+      const DADOS_TUTOR = HELPER_TUTORES.gerarDadosValidosParaCriarTutor()
+
+      const { aluno, tokenAluno } = await criarAluno(DADOS_ALUNO, disciplina)
+
+      const { tutor, tokenTutor } = await criarTutor(DADOS_TUTOR, [disciplina, disciplina2])
+
+      const tutoria = await criarTutoria(aluno._id, tutor._id, DADOS_TUTORIA, tokenAluno)
+      await finalizarTutoria(tutoria._id, aluno._id, tutor._id, DADOS_TUTORIA_ENCERRADA, tokenTutor)
+
+      const DADOS_AVALIACOES = HELPER_AVALIACOES.gerarDadosValidosParaUmaAvaliacao()
+      await HELPER_AVALIACOES.adicionarAvaliacao(tutoria._id, DADOS_AVALIACOES, tokenAluno)
+
+      const response = await HELPER_TUTORIAS.historicoAluno(aluno._id, tokenAdmin)
+
+      expect(response.statusCode).toBe(200)
+      expect(response.status).toBe('ok')
+      objetoTesteTutoria(response.body[0])
+
+      expect(response.body[0]).toHaveProperty('avaliacoes')
+      expect(response.body[0]).toHaveProperty('avaliacoes.comentario')
+      expect(response.body[0]).toHaveProperty('avaliacoes.nota')
+      expect(response.body[0]).toHaveProperty('avaliacoes.dataRegistro')
+
+      expect(typeof response.body[0].avaliacoes).toBe('object')
+      expect(typeof response.body[0].avaliacoes.comentario).toBe('string')
+      expect(typeof response.body[0].avaliacoes.nota).toBe('number')
+      expect(typeof response.body[0].avaliacoes.dataRegistro).toBe('string')
     })
   })
 
