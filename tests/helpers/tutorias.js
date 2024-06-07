@@ -28,3 +28,9 @@ exports.encerrarTutoria = async (idTutoria, idAluno, idTutor, dados, token) => {
 
   return body
 }
+
+exports.historicoAluno = async (idAluno, token) => {
+  const { body } = await request.get(`/tutorias/historico/aluno/${idAluno}`).set('x-access-token', token)
+
+  return body
+}
