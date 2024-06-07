@@ -34,3 +34,9 @@ exports.historicoAluno = async (idAluno, token) => {
 
   return body
 }
+
+exports.historicoTutor = async (idTutor, token) => {
+  const { body } = await request.get(`/tutorias/historico/tutor/${idTutor}`).set('x-access-token', token)
+
+  return body
+}
