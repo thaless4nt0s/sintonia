@@ -1,12 +1,6 @@
-/* --- REQUIRES --- */
-
-const mongoose = require('mongoose')
-const SECRET = process.env.SECRET
-
 /* --- HELPERS --- */
 
 const HELPER_RESPONSE = require('../helpers/response')
-const HELPER_TOKEN = require('../helpers/tokens')
 
 /* --- REPOSITORIES --- */
 
@@ -40,7 +34,7 @@ exports.verificarExistenciaPorId = async (req, res, next) => {
   const { idTutoria } = req.params
   try {
     const tutoria = await REPOSITORY_TUTORIAS.buscarUm({ _id: idTutoria }, { __v: 0 })
-    if (!tutoria){
+    if (!tutoria) {
       HELPER_RESPONSE.simpleError(res, 406, 'Tutoria inexistente !')
       return
     }
@@ -53,9 +47,9 @@ exports.verificarExistenciaPorId = async (req, res, next) => {
 exports.verificarSeTutorEAlunoSaoDaMesmaTutoriaAtiva = async (req, res, next) => {
   const { idAluno, idTutor, idTutoria } = req.params
   try {
-    const tutoria = await REPOSITORY_TUTORIAS.buscarUm({ _id: idTutoria, idAluno: idAluno, idTutor: idTutor, tutoriaEncerrada: false }, { __v: 0 })
-    if (!tutoria){
-      HELPER_RESPONSE.simpleError(res, 406, 'A tutoria já está encerrada !')
+    const tutoria = await REPOSITORY_TUTORIAS.buscarUm({ _id: idTutoria, idAluno, idTutor, tutoriaEncerrada: false }, { __v: 0 })
+    if (!tutoria) {
+      HELPER_RESPONSE.simpleError(res, 406, 'O aluno ou tutor não pertencem a tutoria !')
       return
     }
     next()
@@ -80,9 +74,8 @@ exports.verificaSeTutoriaEstaAtiva = async (req, res, next) => {
 }
 
 /* --- AUX FUNCTIONS --- */
-function compararDisciplinasDeAlunosComTutores(idDisciplinaAluno, idDisciplinaTutor) {
+function compararDisciplinasDeAlunosComTutores (idDisciplinaAluno, idDisciplinaTutor) {
   // Transformar idDisciplinaAluno em String caso não seja um array
   const disciplinasAluno = Array.isArray(idDisciplinaAluno) ? idDisciplinaAluno.map(String) : [String(idDisciplinaAluno)]
   return idDisciplinaTutor.some(disciplina => disciplinasAluno.includes(String(disciplina)))
 }
-
