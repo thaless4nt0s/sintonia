@@ -23,3 +23,9 @@ exports.alterarDados = async (idAdmin, dados, token) => {
 
   return body
 }
+
+exports.removerAluno = async (idAluno, token) => {
+  const { body } = await request.delete(`/administradores/alunos/${idAluno}`).set('x-access-token', token)
+
+  return body
+}
