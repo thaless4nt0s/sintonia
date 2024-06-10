@@ -61,6 +61,12 @@ exports.resetarSenha = async (id, tipoUsuario) => {
   await model.findByIdAndUpdate(id, { senha: novaSenha }, { new: true })
 }
 
+// alterar dados
+exports.alterarDados = async (idAdmin, body) => {
+  const dadosAdmin = gerarAdmin(body)
+  await MODEL_ADMINS.findByIdAndUpdate(idAdmin, dadosAdmin, { new: true })
+}
+
 /* --- AUX FUNCTIONS --- */
 
 function gerarAdmin (dados) {

@@ -9,6 +9,8 @@ const MIDDLEWARE_TOKEN = require('../middlewares/token')
 const MIDDLEWARE_TUTORES = require('../middlewares/tutores')
 const MIDDLEWARE_ALUNOS = require('../middlewares/alunos')
 const MIDDLEWARE_IDS = require('../middlewares/ids')
+const MIDDLEWARE_ADMIN = require('../middlewares/administradores')
+const MIDDLEWARE = require('../middlewares/buscar')
 
 /* --- CONTROLLERS --- */
 
@@ -55,6 +57,16 @@ router.patch(
   MIDDLEWARE_TOKEN.acessoSomenteAdministrador,
   MIDDLEWARE_IDS.verificarExistenciaDoId,
   CONTROLLER_ADMINS.resetarSenha
+)
+
+router.patch(
+  '/:idAdmin',
+  MIDDLEWARE_TOKEN.acessoSomenteAdministrador,
+  MIDDLEWARE_ADMIN.verificarExistenciaPorId,
+  MIDDLEWARE_ADMIN.verificarAdminAutenticado,
+  MIDDLEWARE.buscarEmailExistente,
+  VALIDATION_ADMINS.alterarDados,
+  CONTROLLER_ADMINS.alterarDados
 )
 
 module.exports = router

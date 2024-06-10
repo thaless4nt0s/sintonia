@@ -63,3 +63,31 @@ exports.receberTodos = async (req, res, next) => {
   const erro = VALIDATOR_ERROR.first(validacao)
   HELPER_RESPONSE.simpleError(res, 406, erro)
 }
+
+exports.alterarDados = async (req, res, next) => {
+  const { body } = req
+
+  // Defina a função de validação personalizada para o email
+  Validator.register('emailServidorIFCE',
+    value => HELPER_VALIDATIONS.validateEmailInstitucionalServidor(value),
+    'O campo :attribute deve ser um email do domínio @ifce.edu.br'
+  )
+
+  const regras = {
+    nome: 'string|max:100',
+    email: 'email|max:100|emailServidorIFCE',
+    senha: 'string|min:8|max:10'
+  }
+
+  // Validações
+  const validacao = new Validator(body, regras, VALIDATION_LANGUAGE)
+
+  if (!validacao.fails()) {
+    next()
+    return
+  }
+
+  // Lidar com erro
+  const erro = VALIDATOR_ERROR.first(validacao)
+  HELPER_RESPONSE.simpleError(res, 406, erro)
+}

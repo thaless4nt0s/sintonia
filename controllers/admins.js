@@ -44,3 +44,17 @@ exports.resetarSenha = async (req, res, next) => {
     next(error)
   }
 }
+
+// alterar dados do administrador
+exports.alterarDados = async (req, res, next) => {
+  const { idAdmin } = req.params
+  const { body } = req
+
+  try {
+    body.senha = await HELPER_SENHA.criptografarSenha(body.senha)
+    await REPOSITORY_ADMINS.alterarDados(idAdmin, body)
+    HELPER_RESPONSE.success(res, 'Um administrador foi alterado com sucesso !')
+  } catch (error) {
+    next(error)
+  }
+}
