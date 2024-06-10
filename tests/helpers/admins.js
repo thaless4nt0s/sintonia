@@ -35,3 +35,9 @@ exports.removerTutor = async (idTutor, token) => {
 
   return body
 }
+
+exports.adicionarAdmin = async (dados, token) => {
+  const { body } = await request.post('/administradores').send(dados).set('x-access-token', token)
+
+  return body
+}
