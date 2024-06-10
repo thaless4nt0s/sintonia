@@ -51,10 +51,11 @@ exports.alterarDados = async (req, res, next) => {
   const { body } = req
 
   try {
-    body.senha = await HELPER_SENHA.criptografarSenha(body.senha)
+    if (body.senha) body.senha = await HELPER_SENHA.criptografarSenha(body.senha)
     await REPOSITORY_ADMINS.alterarDados(idAdmin, body)
     HELPER_RESPONSE.success(res, 'Um administrador foi alterado com sucesso !')
   } catch (error) {
+    console.log(error)
     next(error)
   }
 }
