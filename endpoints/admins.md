@@ -114,3 +114,29 @@
 ```
 
 ---
+
+**PATCH** `/administradores/:{idAdmin}`
+
+- **Descrição**: Endpoint responsável por atualizar os dados de um administrador.
+- **Autenticação**: Necessário.
+
+**Query**:
+
+| CAMPO        | TIPO   | OBRIGATÓRIO   | EXEMPLO                        | VALORES ACEITOS                |
+| ------------ | ------ | ------------- | ------------------------------ | ------------------------------ |
+| nome         | string | Não           | Neymar jr                      |                                |
+| email        | string | Não           | neymar.jr.00@aluno.ifce.edu.br | somente @ifce.edu.br           |
+| senha        | string | Não           | 12345678                       | De 8 até 10 caracteres         |
+
+**Response**:
+
+```
+  {
+    "status": "ok",
+    "statusCode": 200,
+    "body": "Um administrador foi alterado com sucesso !"
+  }
+
+```
+
+---
