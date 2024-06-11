@@ -6,13 +6,9 @@ const mongoose = require('mongoose')
 
 const MODEL_DISCIPLINAS = mongoose.model('Disciplinas')
 
-/* --- HELPERS --- */
-
-const HELPER_DATE = require('../helpers/date')
-
 /* ---- METHODS ---- */
 
-//Buscar um
+// Buscar um
 exports.buscarUm = async (filtros, select = {}) => {
   return MODEL_DISCIPLINAS.findOne(filtros).select(select)
 }

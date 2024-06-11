@@ -6,17 +6,12 @@ const mongoose = require('mongoose')
 
 const MODEL_AVALIACOES = mongoose.model('Avaliacoes')
 
-/* --- HELPERS --- */
-
-const HELPER_DATE = require('../helpers/date')
-
 /* ---- METHODS ---- */
 
 // buscar uma avaliacao em especifico
 exports.buscarUm = async (filtros, select = {}) => {
   return MODEL_AVALIACOES.findOne(filtros).select(select)
 }
-
 
 // adicionar
 exports.adicionar = async (idTutoria, idTutor, body) => {

@@ -10,7 +10,6 @@ const VALIDATOR_ERROR = require('../helpers/validations/errors')
 /* --- HELPERS --- */
 
 const HELPER_RESPONSE = require('../helpers/response')
-const HELPER_VALIDATIONS = require('../helpers/validations')
 
 /* --- METHODS --- */
 
@@ -28,8 +27,8 @@ exports.adicionar = async (req, res, next) => {
   const validacao = new Validator(body, regras, VALIDATION_LANGUAGE)
 
   if (!validacao.fails()) {
-      next()
-      return
+    next()
+    return
   }
 
   // Lidar com erro

@@ -1,12 +1,6 @@
-/* --- REQUIRES --- */
-
-const dotenv = require('dotenv').config()
-const morgan = require('morgan')
-const PORT = process.env.PORT
-
 /* --- Methods --- */
 
-function registrar(app) {
+function registrar (app) {
   index(app)
   paginas(app)
   erro(app)
@@ -22,7 +16,7 @@ function paginas (app) {
   const ROUTES_TUTORES = require('../routes/tutores')
   const ROUTES_ADMINS = require('../routes/admins')
   const ROUTES_TUTORIAS = require('../routes/tutorias')
-  const ROUTES_AVALIACOES = require ('../routes/avaliacoes')
+  const ROUTES_AVALIACOES = require('../routes/avaliacoes')
 
   // APP.USE
 
@@ -35,7 +29,6 @@ function paginas (app) {
   app.use('/tutorias', ROUTES_TUTORIAS)
   app.use('/avaliacoes', ROUTES_AVALIACOES)
 }
-
 
 function index (app) {
   const ROUTE_INDEX = require('../routes/index')

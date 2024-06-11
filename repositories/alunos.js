@@ -7,10 +7,6 @@ const mongoose = require('mongoose')
 const MODEL_ALUNOS = mongoose.model('Alunos')
 const MODEL_TUTORIAS = mongoose.model('Tutorias')
 
-/* --- HELPERS --- */
-
-const HELPER_DATE = require('../helpers/date')
-
 /* ---- METHODS ---- */
 
 // Busca de maneira especifica
@@ -29,7 +25,7 @@ exports.adicionar = async (body) => {
 // alterar dados de um aluno
 exports.alterarDados = async (idAluno, body) => {
   const alunoEditado = gerarAlunoEditado(body)
-  return MODEL_ALUNOS.findOneAndUpdate({_id: idAluno}, alunoEditado).catch(error => { throw error })
+  return MODEL_ALUNOS.findOneAndUpdate({ _id: idAluno }, alunoEditado).catch(error => { throw error })
 }
 
 // remover um aluno
@@ -40,7 +36,7 @@ exports.remover = async (idAluno) => {
 // mostrar historico de um aluno
 exports.mostrarHistorico = async (idAluno) => {
   const filtros = {
-    idAluno: new mongoose.Types.ObjectId(idAluno),
+    idAluno: new mongoose.Types.ObjectId(idAluno)
   }
 
   const select = {
@@ -116,7 +112,7 @@ exports.mostrarHistorico = async (idAluno) => {
     {
       $addFields: {
         emTutoria: {
-          $cond: { if: "$emTutoria", then: "Em andamento", else: "Finalizada" }
+          $cond: { if: '$emTutoria', then: 'Em andamento', else: 'Finalizada' }
         },
         'avaliacoes.dataRegistro': {
           $dateToString: {
@@ -136,7 +132,7 @@ exports.mostrarHistorico = async (idAluno) => {
       $project: select
     },
     {
-      $sort: {dataEncerramento: -1}
+      $sort: { dataEncerramento: -1 }
     }
   ])
 }
@@ -153,7 +149,7 @@ exports.receberPorId = async (idAluno) => {
     matricula: 1,
     'disciplina.nome': 1,
     emTutoria: {
-      $cond: { if: "$emTutoria", then: "Em tutoria", else: "Não está em tutoria no momento" }
+      $cond: { if: '$emTutoria', then: 'Em tutoria', else: 'Não está em tutoria no momento' }
     },
     'tutorias.titulo': 1,
     'tutorias.dataRegistro': 1,
@@ -189,7 +185,7 @@ exports.receberPorId = async (idAluno) => {
     {
       $addFields: {
         'tutorias.status': {
-          $cond: { if: "$tutorias.tutoriaEncerrada", then: "Finalizada", else: "Em andamento" }
+          $cond: { if: '$tutorias.tutoriaEncerrada', then: 'Finalizada', else: 'Em andamento' }
         },
         'tutorias.dataRegistro': {
           $dateToString: {
@@ -225,7 +221,7 @@ exports.receberTodos = async () => {
     'disciplina.nome': 1,
     dataRegistro: 1,
     emTutoria: {
-      $cond: { if: "$emTutoria", then: "Em tutoria", else: "Não está em tutoria no momento" }
+      $cond: { if: '$emTutoria', then: 'Em tutoria', else: 'Não está em tutoria no momento' }
     },
     'tutorias._id': 1,
     'tutorias.titulo': 1,
@@ -259,7 +255,7 @@ exports.receberTodos = async () => {
     {
       $addFields: {
         'tutorias.status': {
-          $cond: { if: "$tutorias.tutoriaEncerrada", then: "Finalizada", else: "Em andamento" }
+          $cond: { if: '$tutorias.tutoriaEncerrada', then: 'Finalizada', else: 'Em andamento' }
         },
         'tutorias.dataRegistro': {
           $dateToString: {
@@ -283,7 +279,7 @@ exports.receberTodos = async () => {
         matricula: { $first: '$matricula' },
         disciplina: { $first: '$disciplina' },
         emTutoria: { $first: '$emTutoria' },
-        dataRegistro: { $first: '$dataRegistro'},
+        dataRegistro: { $first: '$dataRegistro' },
         tutorias: { $push: '$tutorias' }
       }
     },
@@ -295,8 +291,8 @@ exports.receberTodos = async () => {
 
 /* --- AUX FUNCTIONS --- */
 
-function gerarAluno(dados) {
-  const { nome, email, matricula, senha} = dados
+function gerarAluno (dados) {
+  const { nome, email, matricula, senha } = dados
   const aluno = {}
 
   if (nome) aluno.nome = nome
@@ -307,7 +303,7 @@ function gerarAluno(dados) {
   return aluno
 }
 
-function gerarAlunoEditado(dados) {
+function gerarAlunoEditado (dados) {
   const aluno = gerarAluno(dados)
   if (dados.idDisciplina) aluno.idDisciplina = dados.idDisciplina
 

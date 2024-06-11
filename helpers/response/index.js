@@ -21,7 +21,6 @@ exports.serverError = (res) => {
   return sendResponse(res, 'error', statusCode, message)
 }
 
-
 /* ---- AUX FUNCTIONS ---- */
 
 function sendResponse (res, status, statusCode, body) {

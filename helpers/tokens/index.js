@@ -6,9 +6,9 @@ const jwt = require('jsonwebtoken')
 
 exports.gerarToken = async (usuario, secret) => {
   return jwt.sign(
-    {usuario},
+    { usuario },
     secret,
-    {expiresIn: '7d'}
+    { expiresIn: '7d' }
   )
 }
 

@@ -14,7 +14,7 @@ const HELPER_DATE = require('../helpers/date')
 
 /* ---- METHODS ---- */
 
-//buscar uma tutoria em especifico
+// buscar uma tutoria em especifico
 exports.buscarUm = async (filtros, select = {}) => {
   return MODEL_TUTORIAS.findOne(filtros, select)
 }
@@ -29,13 +29,13 @@ exports.iniciarTutoria = async (idAluno, idTutor, idDisciplina, body) => {
     const tutoriaInicial = gerarTutoriaInicial(idAluno, idTutor, idDisciplina, titulo)
     await MODEL_TUTORIAS.create([tutoriaInicial], { session })
 
-    const alunoAtualizado = await MODEL_ALUNOS.findByIdAndUpdate(
+    await MODEL_ALUNOS.findByIdAndUpdate(
       idAluno,
       { emTutoria: true },
       { new: true }
     )
 
-    const tutorAtualizado = await MODEL_TUTORES.findByIdAndUpdate(
+    await MODEL_TUTORES.findByIdAndUpdate(
       idTutor,
       { emTutoria: true },
       { new: true }
@@ -43,7 +43,7 @@ exports.iniciarTutoria = async (idAluno, idTutor, idDisciplina, body) => {
     await session.commitTransaction()
   } catch (error) {
     await session.abortTransaction()
-  }finally {
+  } finally {
     session.endSession()
   }
 }
@@ -58,13 +58,13 @@ exports.encerrarTutoria = async (idTutoria, idAluno, idTutor, body) => {
     const tutoriaEncerrada = gerarTutoriaEncerrada(resumo)
     await MODEL_TUTORIAS.findByIdAndUpdate(idTutoria, tutoriaEncerrada, { session })
 
-    const alunoAtualizado = await MODEL_ALUNOS.findByIdAndUpdate(
+    await MODEL_ALUNOS.findByIdAndUpdate(
       idAluno,
       { emTutoria: false },
       { new: true }
     )
 
-    const tutorAtualizado = await MODEL_TUTORES.findByIdAndUpdate(
+    await MODEL_TUTORES.findByIdAndUpdate(
       idTutor,
       { emTutoria: false },
       { new: true }
@@ -72,7 +72,7 @@ exports.encerrarTutoria = async (idTutoria, idAluno, idTutor, body) => {
     await session.commitTransaction()
   } catch (error) {
     await session.abortTransaction()
-  }finally {
+  } finally {
     session.endSession()
   }
 }

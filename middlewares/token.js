@@ -1,7 +1,3 @@
-/* --- REQUIRES --- */
-
-const jwt = require('jsonwebtoken')
-
 /* --- HELPERS --- */
 
 const HELPER_RESPONSE = require('../helpers/response')
@@ -17,7 +13,7 @@ exports.acessoPorTodosOsUsuarios = async (req, res, next) => {
   try {
     const token = req.headers['x-access-token']
     const tokenValido = await validacaoToken(req, res, token)
-    if (!tokenValido) return  // Se a validação falhar, retorne imediatamente para evitar chamar next()
+    if (!tokenValido) return // Se a validação falhar, retorne imediatamente para evitar chamar next()
     next()
   } catch (error) {
     next(error)
@@ -27,7 +23,7 @@ exports.acessoPorTodosOsUsuarios = async (req, res, next) => {
 exports.acessoSomenteAdministrador = async (req, res, next) => {
   try {
     const acessoValido = await verificarAcessoPorTipo(req, res, 'administrador')
-    if (!acessoValido) return  // Se a validação falhar, retorne imediatamente para evitar chamar next()
+    if (!acessoValido) return // Se a validação falhar, retorne imediatamente para evitar chamar next()
     next()
   } catch (error) {
     next(error)
@@ -37,7 +33,7 @@ exports.acessoSomenteAdministrador = async (req, res, next) => {
 exports.acessoSomenteTutor = async (req, res, next) => {
   try {
     const acessoValido = await verificarAcessoPorTipo(req, res, 'tutor')
-    if (!acessoValido) return  // Se a validação falhar, retorne imediatamente para evitar chamar next()
+    if (!acessoValido) return // Se a validação falhar, retorne imediatamente para evitar chamar next()
     next()
   } catch (error) {
     next(error)
@@ -47,7 +43,7 @@ exports.acessoSomenteTutor = async (req, res, next) => {
 exports.acessoSomenteAluno = async (req, res, next) => {
   try {
     const acessoValido = await verificarAcessoPorTipo(req, res, 'aluno')
-    if (!acessoValido) return  // Se a validação falhar, retorne imediatamente para evitar chamar next()
+    if (!acessoValido) return // Se a validação falhar, retorne imediatamente para evitar chamar next()
     next()
   } catch (error) {
     next(error)
@@ -56,7 +52,7 @@ exports.acessoSomenteAluno = async (req, res, next) => {
 
 /* --- AUXILIARY FUNCTIONS --- */
 
-async function verificarTokenValido(token, secret) {
+async function verificarTokenValido (token, secret) {
   try {
     const decoded = await HELPER_TOKEN.verificarToken(token, secret)
     return decoded
@@ -65,7 +61,7 @@ async function verificarTokenValido(token, secret) {
   }
 }
 
-async function validacaoToken(req, res, token) {
+async function validacaoToken (req, res, token) {
   if (!token) {
     HELPER_RESPONSE.simpleError(res, 403, 'Token não fornecido.')
     return false
@@ -80,11 +76,11 @@ async function validacaoToken(req, res, token) {
   return true
 }
 
-async function verificarAcessoPorTipo(req, res, tipo) {
+async function verificarAcessoPorTipo (req, res, tipo) {
   const token = req.headers['x-access-token']
 
   const tokenValido = await validacaoToken(req, res, token)
-  if (!tokenValido) return false  // Se a validação falhar, retorne imediatamente para evitar chamar next()
+  if (!tokenValido) return false // Se a validação falhar, retorne imediatamente para evitar chamar next()
 
   const { usuario } = await HELPER_TOKEN.obterDadosDoToken(token, SECRET)
   const tipoUsuario = usuario.tipo

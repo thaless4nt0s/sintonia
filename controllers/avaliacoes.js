@@ -8,7 +8,7 @@ const HELPER_RESPONSE = require('../helpers/response')
 
 /* --- METHODS --- */
 
-//adicionar uma avaliacao
+// adicionar uma avaliacao
 exports.adicionar = async (req, res, next) => {
   const { idTutoria } = req.params
   const { body } = req

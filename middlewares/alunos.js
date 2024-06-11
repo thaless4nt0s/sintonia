@@ -1,6 +1,5 @@
 /* --- REQUIRES --- */
 
-const mongoose = require('mongoose')
 const SECRET = process.env.SECRET
 /* --- HELPERS --- */
 
@@ -39,7 +38,7 @@ exports.verificarAlunoAutenticado = async (req, res, next) => {
     const { usuario } = await HELPER_TOKEN.obterDadosDoToken(token, SECRET)
     const idUsuario = usuario.usuario._id
 
-    if (!(idAluno === idUsuario)){
+    if (!(idAluno === idUsuario)) {
       HELPER_RESPONSE.simpleError(res, 406, 'Acesso não autorizado !')
       return
     }

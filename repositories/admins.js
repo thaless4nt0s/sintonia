@@ -53,7 +53,7 @@ exports.resetarSenha = async (id, tipoUsuario) => {
   const MODELS = {
     aluno: MODEL_ALUNOS,
     tutor: MODEL_TUTORES,
-    admiin: MODEL_ADMINS
+    admin: MODEL_ADMINS
   }
 
   const model = MODELS[tipoUsuario]

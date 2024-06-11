@@ -1,4 +1,4 @@
-/* ---  REPOSITORIES --- */
+/* --- REPOSITORIES --- */
 
 const REPOSITORY_ALUNOS = require('../repositories/alunos')
 

@@ -1,6 +1,5 @@
 /* --- REQUIRES --- */
 
-const mongoose = require('mongoose')
 const SECRET = process.env.SECRET
 
 /* --- HELPERS --- */
@@ -19,7 +18,7 @@ exports.verificarExistenciaPorId = async (req, res, next) => {
 
   try {
     const tutor = await REPOSITORY_TUTORES.buscarUm({ _id: idTutor }, { _id: 1 })
-    if (!tutor){
+    if (!tutor) {
       HELPER_RESPONSE.simpleError(res, 406, 'Tutor não encontrado !')
       return
     }
@@ -38,7 +37,7 @@ exports.verificarTutorAutenticado = async (req, res, next) => {
     const { usuario } = await HELPER_TOKEN.obterDadosDoToken(token, SECRET)
     const idUsuario = usuario.usuario._id
 
-    if (!(idTutor === idUsuario)){
+    if (!(idTutor === idUsuario)) {
       HELPER_RESPONSE.simpleError(res, 406, 'Acesso não autorizado !')
       return
     }

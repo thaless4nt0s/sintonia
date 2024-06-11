@@ -8,7 +8,6 @@ const router = express.Router()
 const MIDDLEWARE_TOKEN = require('../middlewares/token')
 const MIDDLEWARE_TUTORIAS = require('../middlewares/tutorias')
 const MIDDLEWARE_AVALIACOES = require('../middlewares/avaliacoes')
-const MIDDLEWARE_IDS = require('../middlewares/ids')
 
 /* --- CONSTANTS --- */
 

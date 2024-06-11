@@ -1,4 +1,4 @@
-/* ---  REPOSITORIES --- */
+/* --- REPOSITORIES --- */
 
 const REPOSITORY_TUTORIAS = require('../repositories/tutorias')
 

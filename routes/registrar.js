@@ -13,14 +13,13 @@ const VALIDATION_ALUNOS = require('../validations/alunos')
 const VALIDATION_TUTORES = require('../validations/tutores')
 const VALIDATION_ADMINS = require('../validations/admins')
 
-
 /* --- MIDDLEWARES --- */
 
 const MIDDLEWARE = require('../middlewares/buscar')
 
 /* --- METHODS --- */
 
-//Adicionar aluno
+// Adicionar aluno
 router.post(
   '/aluno',
   VALIDATION_ALUNOS.adicionar,

@@ -1,6 +1,5 @@
 /* --- CONSTANTS --- */
 
-const jwt = require('jsonwebtoken')
 const SECRET = process.env.SECRET
 
 /* ---  REPOSITORIES --- */
@@ -20,10 +19,9 @@ const HELPER_TOKEN = require('../helpers/tokens')
 exports.autenticar = async (req, res, next) => {
   const { body } = req
   try {
-
     const aluno = await REPOSITORY_ALUNOS.buscarUm({ email: body.email })
     const tutor = await REPOSITORY_TUTORES.buscarUm({ email: body.email })
-    const administrador = await REPOSITORY_ADMINS.buscarUm({email: body.email })
+    const administrador = await REPOSITORY_ADMINS.buscarUm({ email: body.email })
 
     let usuario
     //  Dessa maneira, será guardado na variável usuário o valor de algum dos
@@ -34,9 +32,8 @@ exports.autenticar = async (req, res, next) => {
         //  Precisa deste return true para não dar erro no código
         return true
       }
-      usuario = {usuario: aluno.toObject(), tipo: 'aluno'}
-
-    }else if (tutor) {
+      usuario = { usuario: aluno.toObject(), tipo: 'aluno' }
+    } else if (tutor) {
       const senhaVerificada = await HELPER_SENHA.verificarSenha(body.senha, tutor.senha)
       if (!senhaVerificada) {
         HELPER_RESPONSE.simpleError(res, 406, 'Email ou senha incorretos !')
@@ -44,16 +41,15 @@ exports.autenticar = async (req, res, next) => {
         return true
       }
       delete tutor.senha
-      usuario = {usuario: tutor.toObject(), tipo: 'tutor'}
-
-    }else if (administrador) {
+      usuario = { usuario: tutor.toObject(), tipo: 'tutor' }
+    } else if (administrador) {
       const senhaVerificada = await HELPER_SENHA.verificarSenha(body.senha, administrador.senha)
       if (!senhaVerificada) {
         HELPER_RESPONSE.simpleError(res, 406, 'Email ou senha incorretos !')
         //  Precisa deste return true para não dar erro no código
         return true
       }
-      usuario = {usuario: administrador.toObject(), tipo: 'administrador'}
+      usuario = { usuario: administrador.toObject(), tipo: 'administrador' }
     }
 
     if (!usuario) {

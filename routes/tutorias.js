@@ -8,7 +8,6 @@ const router = express.Router()
 const MIDDLEWARE_TOKEN = require('../middlewares/token')
 const MIDDLEWARE_ALUNOS = require('../middlewares/alunos')
 const MIDDLEWARE_TUTORES = require('../middlewares/tutores')
-const MIDDLEWARE_DISCIPLINAS = require('../middlewares/disciplinas')
 const MIDDLEWARE_TUTORIAS = require('../middlewares/tutorias')
 
 /* --- CONTROLLERS --- */
@@ -62,6 +61,5 @@ router.get(
   MIDDLEWARE_ALUNOS.verificarExistenciaPorId,
   CONTROLLER_ALUNOS.mostrarHistorico
 )
-
 
 module.exports = router

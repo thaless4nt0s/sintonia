@@ -63,4 +63,3 @@ module.exports = (mongoose) => {
 
   return mongoose.model('Tutorias', schema)
 }
-

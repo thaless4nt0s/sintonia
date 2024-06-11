@@ -1,8 +1,7 @@
 const mongoose = require('mongoose')
 
-/* --- CONSTS --- */
+/* --- CONSTANTS --- */
 
-const HELPER_VALIDATION = require('../helpers/validations')
 const HELPER_DATE = require('../helpers/date')
 
 /* ---  METHODS --- */

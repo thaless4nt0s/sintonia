@@ -6,7 +6,7 @@ const HELPER_RESPONSE = require('../helpers/response')
 
 /* --- REPOSITORIEs --- */
 
-const REPOSITORY_ALUNOS =  require('../repositories/alunos')
+const REPOSITORY_ALUNOS = require('../repositories/alunos')
 const REPOSITORY_TUTORES = require('../repositories/tutores')
 const REPOSITORY_ADMINS = require('../repositories/admins')
 

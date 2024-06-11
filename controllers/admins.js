@@ -55,7 +55,6 @@ exports.alterarDados = async (req, res, next) => {
     await REPOSITORY_ADMINS.alterarDados(idAdmin, body)
     HELPER_RESPONSE.success(res, 'Um administrador foi alterado com sucesso !')
   } catch (error) {
-    console.log(error)
     next(error)
   }
 }

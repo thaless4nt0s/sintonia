@@ -10,12 +10,10 @@ const HELPER_RESPONSE = require('../helpers/response')
 
 /* --- METHODS --- */
 
-router.get('/', (req, res) =>{
-    const { version, name } = packageJson
-    HELPER_RESPONSE.success(res, `Bem vindo ao ${name} (${version})`)
-  }
+router.get('/', (req, res) => {
+  const { version, name } = packageJson
+  HELPER_RESPONSE.success(res, `Bem vindo ao ${name} (${version})`)
+}
 )
-
-
 
 module.exports = router
