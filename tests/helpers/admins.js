@@ -41,3 +41,9 @@ exports.adicionarAdmin = async (dados, token) => {
 
   return body
 }
+
+exports.resetarSenha = async (idUsuario, token) => {
+  const { body } = await request.patch(`/administradores/resetar-senha/${idUsuario}`).set('x-access-token', token)
+
+  return body
+}
