@@ -47,3 +47,9 @@ exports.resetarSenha = async (idUsuario, token) => {
 
   return body
 }
+
+exports.receberTodos = async (token) => {
+  const { body } = await request.get('/administradores').set('x-access-token', token)
+
+  return body
+}
