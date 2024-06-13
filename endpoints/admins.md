@@ -140,3 +140,50 @@
 ```
 
 ---
+
+**GET** `/administradores/estatisticas?dataInicial={}&dataFinal={}`
+
+- **Descrição**: Endpoint responsável por mostrar as estatísticas em um determinado período.
+- **Autenticação**: Necessário.
+- **Observação**: Os campos dataInicial e dataFinal devem seguir o formato que é apresentado na tabela abaixo, no caso da dataFinal, o começo do dia se dá as 03:00 do fuso do GMT 0, que é 00:00 no GMT -3 (horário de brasília) o fim do dia se dá as 02:59 da manhã do GMT 0, que é exatamente as 23:59 no GTM -3 (horário de brasília)
+
+**Query**:
+
+| CAMPO             | TIPO    | OBRIGATÓRIO   | EXEMPLO                        |
+| ----------------- | ------- | ------------- | ------------------------------ |
+| dataInicial       | Data    | Sim           | 2024-05-01T03:00:00.000Z       |
+| dataFinal         | Data    | Sim           | 2024-06-01T02:59:00.000Z       |
+
+
+**Response**:
+
+```
+{
+  "status":"ok",
+  "statusCode":200,
+  "body":{
+    "estatisticas":[
+      {
+        "nome":"Henrique Leitão",
+        "tutoriasRealizadas":5,
+        "tutoriaPendente":0,
+        "idTutor":"664de15776e2a0d4310f31e9",
+        "quantidadeAlunos":2
+      },
+      {
+        "nome":"Mario Sérgio",
+        "tutoriasRealizadas":4,
+        "tutoriaPendente":1,
+        "idTutor":"664e2e9b005e042583f69f49",
+        "quantidadeAlunos":3
+      }
+    ],
+    "novosAlunos":6,
+    "novosTutores":4,
+    "totalDeTutoriasRealizadasNoPeriodo":10
+  }
+}
+
+```
+
+---
