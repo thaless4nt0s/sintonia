@@ -116,7 +116,7 @@ exports.mostrarHistorico = async (idAluno) => {
         },
         'avaliacoes.dataRegistro': {
           $dateToString: {
-            date: '$dataRegistro',
+            date: '$avaliacoes.dataRegistro',
             format: '%d/%m/%Y'
           }
         },

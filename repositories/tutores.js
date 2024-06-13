@@ -218,7 +218,7 @@ exports.mostrarHistorico = async (idTutor) => {
         },
         'avaliacoes.dataRegistro': {
           $dateToString: {
-            date: '$dataRegistro',
+            date: '$avaliacoes.dataRegistro',
             format: '%d/%m/%Y'
           }
         }
@@ -247,8 +247,8 @@ exports.receberPorId = async (idTutor) => {
     emTutoria: 1,
     'disciplinas.nome': 1,
     'avaliacoes.comentario': 1,
-    'avaliacoes.dataRegistro': 1,
     'avaliacoes.nota': 1,
+    'avaliacoes.dataRegistro': 1,
     media: 1
   }
 
@@ -275,14 +275,27 @@ exports.receberPorId = async (idTutor) => {
     {
       $addFields: {
         media: { $round: [{ $avg: '$avaliacoes.nota' }, 1] },
-        'avaliacoes.dataRegistro': {
-          $dateToString: {
-            date: '$dataRegistro',
-            format: '%d/%m/%Y'
-          }
-        },
         emTutoria: {
           $cond: { if: '$emTutoria', then: 'sim', else: 'não' }
+        },
+        avaliacoes: {
+          $map: {
+            input: '$avaliacoes',
+            as: 'avaliacao',
+            in: {
+              $mergeObjects: [
+                '$$avaliacao',
+                {
+                  dataRegistro: {
+                    $dateToString: {
+                      date: '$$avaliacao.dataRegistro',
+                      format: '%d/%m/%Y'
+                    }
+                  }
+                }
+              ]
+            }
+          }
         }
       }
     },
