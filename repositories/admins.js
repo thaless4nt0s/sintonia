@@ -11,6 +11,7 @@ const HELPER_SENHA = require('../helpers/passwords')
 const MODEL_ADMINS = mongoose.model('Admins')
 const MODEL_TUTORES = mongoose.model('Tutores')
 const MODEL_ALUNOS = mongoose.model('Alunos')
+const MODEL_TUTORIAS = mongoose.model('Tutorias')
 
 /* ---- METHODS ---- */
 
@@ -67,6 +68,85 @@ exports.alterarDados = async (idAdmin, body) => {
   await MODEL_ADMINS.findByIdAndUpdate(idAdmin, dadosAdmin, { new: true })
 }
 
+// receber estatisticas
+exports.receberEstatisticas = async (query) => {
+  const { dataInicial, dataFinal } = query
+
+  // Converte as datas para objetos Date
+  const periodoInicial = new Date(dataInicial)
+  const periodoFinal = new Date(dataFinal)
+
+  const filtroData = {
+    dataRegistro: {
+      $gte: periodoInicial,
+      $lte: periodoFinal
+    }
+  }
+
+  const estatisticas = await MODEL_TUTORIAS.aggregate([
+    {
+      $match: filtroData
+    },
+    {
+      $project: {
+        dataRegistro: 1,
+        idTutor: 1,
+        idAluno: 1,
+        tutoriaEncerrada: 1
+      }
+    },
+    {
+      $lookup: {
+        from: 'tutores',
+        localField: 'idTutor',
+        foreignField: '_id',
+        as: 'tutor'
+      }
+    },
+    {
+      $unwind: '$tutor'
+    },
+    {
+      $group: {
+        _id: '$idTutor',
+        nome: { $first: '$tutor.nome' },
+        alunosDistintos: { $addToSet: '$idAluno' },
+        tutoriasRealizadas: {
+          $sum: {
+            $cond: [{ $eq: ['$tutoriaEncerrada', true] }, 1, 0]
+          }
+        },
+        tutoriaPendente: {
+          $sum: {
+            $cond: [{ $eq: ['$tutoriaEncerrada', false] }, 1, 0]
+          }
+        }
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        idTutor: '$_id',
+        nome: 1,
+        quantidadeAlunos: { $size: '$alunosDistintos' },
+        tutoriasRealizadas: 1,
+        tutoriaPendente: 1
+      }
+    }
+  ])
+
+  const novosAlunos = await MODEL_ALUNOS.countDocuments(filtroData)
+  const novosTutores = await MODEL_TUTORES.countDocuments(filtroData)
+  const totalDeTutoriasRealizadasNoPeriodo = await MODEL_TUTORIAS.countDocuments(filtroData)
+
+  return {
+    estatisticas,
+    novosAlunos,
+    novosTutores,
+    totalDeTutoriasRealizadasNoPeriodo
+  }
+}
+
 /* --- AUX FUNCTIONS --- */
 
 function gerarAdmin (dados) {
@@ -79,3 +159,5 @@ function gerarAdmin (dados) {
 
   return admin
 }
+
+// fazer mais testes e ver se falta mais algum dado

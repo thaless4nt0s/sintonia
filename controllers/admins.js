@@ -58,3 +58,14 @@ exports.alterarDados = async (req, res, next) => {
     next(error)
   }
 }
+
+// mostrar as estatisticas
+exports.receberEstatisticas = async (req, res, next) => {
+  const { query } = req
+  try {
+    const estatisticas = await REPOSITORY_ADMINS.receberEstatisticas(query)
+    HELPER_RESPONSE.success(res, estatisticas)
+  } catch (error) {
+    next(error)
+  }
+}

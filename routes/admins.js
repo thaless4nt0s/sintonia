@@ -69,4 +69,11 @@ router.patch(
   CONTROLLER_ADMINS.alterarDados
 )
 
+router.get(
+  '/estatisticas',
+  MIDDLEWARE_TOKEN.acessoSomenteAdministrador,
+  VALIDATION_ADMINS.receberEstatisticas,
+  CONTROLLER_ADMINS.receberEstatisticas
+)
+
 module.exports = router
