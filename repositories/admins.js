@@ -128,7 +128,7 @@ exports.receberEstatisticas = async (query) => {
         _id: 0,
         idTutor: '$_id',
         nome: 1,
-        quantidadeAlunos: { $size: '$alunosDistintos' },
+        quantidadeAlunosAtendidosNoPeriodo: { $size: '$alunosDistintos' },
         tutoriasRealizadas: 1,
         tutoriaPendente: 1
       }
