@@ -53,3 +53,9 @@ exports.receberTodos = async (token) => {
 
   return body
 }
+
+exports.receberEstatisticas = async (dataInicial, dataFinal, token) => {
+  const { body } = await request.get(`/administradores/estatisticas?dataInicial=${dataInicial}&dataFinal=${dataFinal}`).set('x-access-token', token)
+
+  return body
+}
