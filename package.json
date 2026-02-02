@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "start": "node bin/http.js",
     "test": "pnpm jest --config ./tests/config.json --verbose",
     "dev": "nodemon bin/http.js"
   },
