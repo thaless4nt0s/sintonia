@@ -5,7 +5,7 @@ const http = require('http')
 
 /* ---- CONSTS ---- */
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3000
 
 /* ---- SERVER ---- */
 
