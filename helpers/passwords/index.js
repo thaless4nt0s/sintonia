@@ -1,6 +1,6 @@
 /* REQUIRES --- */
 
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 /* --- METHODS --- */
 
